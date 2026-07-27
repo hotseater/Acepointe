@@ -40,8 +40,13 @@ import { services } from '../data/services';
         <HeroDiagram />
       </div>
     </div>
-    <LogoCarousel />
+    <div class="container hero__strip load-rise" style="--rise-delay:760ms">
+      <span>Senior engineers</span>
+      <span>Weeks to production</span>
+      <span>You own it after</span>
+    </div>
   </section>
+  <LogoCarousel />
 
   <!-- SERVICES -->
   <section id="services" class="section container">
@@ -91,8 +96,32 @@ import { services } from '../data/services';
 
 <style>
   .hero {
-    background: linear-gradient(180deg, var(--brand-hero-tint) 0%, var(--bg) 100%);
+    --hero-red: color-mix(in srgb, var(--brand) 60%, white);
+    position: relative;
+    isolation: isolate;
+    color: #fff;
+    background:
+      radial-gradient(
+        ellipse 52% 62% at 74% 40%,
+        color-mix(in srgb, var(--brand) 46%, transparent),
+        transparent 60%
+      ),
+      linear-gradient(158deg, #26121a 0%, #150b0f 100%);
     padding-top: clamp(3.5rem, 2rem + 6vw, 6rem);
+    overflow: hidden;
+  }
+  /* subtle dot texture like the OG card */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: linear-gradient(180deg, #000 0%, transparent 78%);
+  }
+  .hero .eyebrow {
+    color: var(--hero-red);
   }
   .hero__inner {
     display: grid;
@@ -113,6 +142,7 @@ import { services } from '../data/services';
     display: flex;
     flex-direction: column;
     margin: 0;
+    color: #fff;
     font-size: clamp(3rem, 2.6rem + 4vw, 5.25rem);
     font-weight: 700;
     line-height: 0.94;
@@ -122,12 +152,42 @@ import { services } from '../data/services';
     display: block;
   }
   .hero__title .accent {
-    color: var(--brand);
+    color: var(--hero-red);
   }
   .hero__lead {
     font-size: var(--step-1);
     max-width: 540px;
     margin: 30px 0 38px;
+    color: rgba(255, 255, 255, 0.74);
+  }
+
+  /* Secondary CTA on the dark hero */
+  .hero :global(.btn--secondary) {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.38);
+  }
+  .hero :global(.btn--secondary:hover) {
+    color: #fff;
+    border-color: #fff;
+  }
+
+  /* OG-style value-prop strip */
+  .hero__strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 14px;
+    padding-bottom: clamp(2rem, 1.5rem + 2vw, 3rem);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--hero-red);
+  }
+  .hero__strip span:not(:last-child)::after {
+    content: '·';
+    margin-left: 14px;
+    color: rgba(255, 255, 255, 0.4);
   }
 
   .hero__visual {
