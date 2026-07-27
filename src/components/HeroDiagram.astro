@@ -18,15 +18,16 @@
         <stop offset="1" stop-color="var(--brand-deep)" />
       </linearGradient>
       <linearGradient id="topHi" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#ffffff" stop-opacity="0.12" />
-        <stop offset="0.14" stop-color="#ffffff" stop-opacity="0" />
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.18" />
+        <stop offset="0.16" stop-color="#ffffff" stop-opacity="0" />
       </linearGradient>
     </defs>
 
-    <!-- panel: dark, top highlight, hairline border -->
+    <!-- panel: dark, top highlight, defined border -->
     <rect x="0" y="0" width="600" height="440" rx="20" fill="url(#panelBg)" />
     <rect x="0" y="0" width="600" height="440" rx="20" fill="url(#topHi)" />
-    <rect x="1" y="1" width="598" height="438" rx="19" fill="none" stroke="#ffffff" stroke-opacity="0.1" />
+    <rect x="1" y="1" width="598" height="438" rx="19" fill="none" stroke="#ffffff" stroke-opacity="0.16" />
+    <rect x="1" y="1" width="598" height="438" rx="19" fill="none" stroke="var(--brand)" stroke-opacity="0.28" stroke-width="1.5" />
     <g opacity="0.5">
       {Array.from({ length: 11 }).map((_, r) =>
         Array.from({ length: 15 }).map((_, c) => (

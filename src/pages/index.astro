@@ -134,19 +134,32 @@ import { services } from '../data/services';
     position: relative;
     isolation: isolate;
   }
-  /* Brand-glow halo so the dark diagram anchors the hero and pops off the light bg. */
+  /* Bold brand-red aura so the dark diagram reads as a glowing embedded panel. */
   .hero__visual::before {
     content: '';
     position: absolute;
-    inset: -14% -16%;
+    inset: -28% -26%;
     z-index: -1;
     background: radial-gradient(
-      ellipse 60% 58% at 60% 46%,
-      color-mix(in srgb, var(--brand) 48%, transparent),
-      color-mix(in srgb, var(--brand) 16%, transparent) 46%,
-      transparent 72%
+      ellipse 56% 54% at 60% 50%,
+      color-mix(in srgb, var(--brand) 78%, transparent),
+      color-mix(in srgb, var(--brand) 34%, transparent) 38%,
+      transparent 68%
     );
-    filter: blur(32px);
+    filter: blur(44px);
+  }
+  /* Tighter, warmer inner glow hugging the panel edge. */
+  .hero__visual::after {
+    content: '';
+    position: absolute;
+    inset: -6%;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse 60% 60% at 58% 52%,
+      color-mix(in srgb, var(--brand) 45%, transparent),
+      transparent 66%
+    );
+    filter: blur(22px);
   }
   .hero__actions {
     display: flex;
