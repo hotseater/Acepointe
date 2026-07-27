@@ -1,22 +1,34 @@
 ---
-/** Shared inner-page hero: eyebrow + title + intro (+ optional actions). */
+/** Shared inner-page hero: eyebrow + title + intro (+ optional actions + optional right visual). */
 interface Props {
   eyebrow: string;
 }
 const { eyebrow } = Astro.props;
 const hasActions = Astro.slots.has('actions');
+const hasVisual = Astro.slots.has('visual');
 ---
 
-<section class="page-hero">
-  <div class="container">
-    <p class="eyebrow load-rise" style="--rise-delay:0ms">{eyebrow}</p>
-    <h1 class="load-rise" style="--rise-delay:90ms"><slot name="title" /></h1>
-    <p class="page-hero__intro load-rise" style="--rise-delay:180ms"><slot name="intro" /></p>
-    {hasActions && (
-      <div class="page-hero__actions load-rise" style="--rise-delay:280ms">
-        <slot name="actions" />
-      </div>
-    )}
+<section class:list={['page-hero', { 'page-hero--split': hasVisual }]}>
+  <div class="container page-hero__inner">
+    <div class="page-hero__copy">
+      <p class="eyebrow load-rise" style="--rise-delay:0ms">{eyebrow}</p>
+      <h1 class="load-rise" style="--rise-delay:90ms"><slot name="title" /></h1>
+      <p class="page-hero__intro load-rise" style="--rise-delay:180ms"><slot name="intro" /></p>
+      {
+        hasActions && (
+          <div class="page-hero__actions load-rise" style="--rise-delay:280ms">
+            <slot name="actions" />
+          </div>
+        )
+      }
+    </div>
+    {
+      hasVisual && (
+        <div class="page-hero__visual load-rise" style="--rise-delay:240ms">
+          <slot name="visual" />
+        </div>
+      )
+    }
   </div>
 </section>
 
@@ -24,6 +36,12 @@ const hasActions = Astro.slots.has('actions');
   .page-hero {
     background: linear-gradient(180deg, var(--brand-hero-tint) 0%, var(--bg) 100%);
     padding-block: clamp(3rem, 2rem + 4vw, 5rem) clamp(2.5rem, 2rem + 3vw, 3.5rem);
+  }
+  .page-hero--split .page-hero__inner {
+    display: grid;
+    grid-template-columns: 1fr 0.82fr;
+    gap: 56px;
+    align-items: center;
   }
   .eyebrow {
     margin-bottom: 16px;
@@ -49,5 +67,16 @@ const hasActions = Astro.slots.has('actions');
     flex-wrap: wrap;
     gap: 16px;
     margin-top: 32px;
+  }
+
+  @media (max-width: 900px) {
+    .page-hero--split .page-hero__inner {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .page-hero__visual {
+      order: 2;
+      max-width: 480px;
+    }
   }
 </style>

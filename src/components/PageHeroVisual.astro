@@ -1,0 +1,194 @@
+---
+/**
+ * PageHeroVisual — crafted dark-panel SVG for inner-page heroes.
+ * Matches the homepage hero panel treatment (dark, red glow, framed).
+ * Static + light idle motion; the container handles the entrance (load-rise).
+ */
+type Variant = 'services' | 'stories' | 'whyus';
+interface Props {
+  variant: Variant;
+}
+const { variant } = Astro.props;
+const labels: Record<Variant, string> = {
+  services: 'Six practices, delivered end to end into production',
+  stories: 'Real outcomes shipped to production',
+  whyus: 'Weeks to production, not quarters',
+};
+---
+
+<div class="phv" role="img" aria-label={labels[variant]}>
+  <svg viewBox="0 0 460 400" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <linearGradient id="phvPanel" x1="0" y1="0" x2="460" y2="400" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#2a171d" />
+        <stop offset="1" stop-color="#1a0f12" />
+      </linearGradient>
+      <linearGradient id="phvRed" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="var(--brand)" />
+        <stop offset="1" stop-color="var(--brand-deep)" />
+      </linearGradient>
+      <linearGradient id="phvHi" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.14" />
+        <stop offset="0.16" stop-color="#ffffff" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+
+    <!-- panel -->
+    <rect width="460" height="400" rx="20" fill="url(#phvPanel)" />
+    <rect width="460" height="400" rx="20" fill="url(#phvHi)" />
+    <rect x="1" y="1" width="458" height="398" rx="19" fill="none" stroke="#ffffff" stroke-opacity="0.14" />
+    <rect x="1" y="1" width="458" height="398" rx="19" fill="none" stroke="var(--brand)" stroke-opacity="0.22" stroke-width="1.5" />
+
+    {variant === 'services' && (
+      <g>
+        {[
+          { y: 54, t: 'STRATEGY & AI CONSULTING' },
+          { y: 116, t: 'DATA ENGINEERING' },
+          { y: 178, t: 'AI SYSTEMS' },
+          { y: 240, t: 'WEB, APP & UX' },
+        ].map((row) => (
+          <g transform={`translate(48 ${row.y})`}>
+            <rect width="364" height="46" rx="10" fill="#ffffff" opacity="0.05" />
+            <rect width="4" height="46" rx="2" fill="var(--brand)" />
+            <text x="24" y="28" class="lbl">{row.t}</text>
+            <circle cx="336" cy="23" r="9" fill="var(--brand-tint)" opacity="0.14" />
+            <path d="M332 23 l3 3 l6 -7" stroke="var(--brand)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        ))}
+        <path d="M60 100 v16 M60 162 v16 M60 224 v16" stroke="var(--brand)" stroke-width="2" stroke-dasharray="3 4" />
+        {/* outcome */}
+        <g transform="translate(48 306)">
+          <rect width="364" height="52" rx="12" fill="url(#phvRed)" />
+          <circle cx="34" cy="26" r="13" fill="#fff" opacity="0.16" />
+          <path d="M26 26 l6 6 l11 -12" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <text x="60" y="31" class="lbl-lg" fill="#fff">Shipped to production</text>
+        </g>
+      </g>
+    )}
+
+    {variant === 'stories' && (
+      <g>
+        {/* stat chips */}
+        {[
+          { x: 40, v: '3.1×', c: 'more qualified leads' },
+          { x: 176, v: '82%', c: 'less reporting time' },
+          { x: 312, v: '6 wks', c: 'to first feature' },
+        ].map((s) => (
+          <g transform={`translate(${s.x} 42)`}>
+            <rect width="118" height="78" rx="12" fill="#ffffff" opacity="0.05" />
+            <text x="16" y="42" class="metric">{s.v}</text>
+            <text x="16" y="62" class="cap">{s.c}</text>
+          </g>
+        ))}
+        {/* rising chart */}
+        <g transform="translate(0 150)">
+          <rect x="40" y="0" width="390" height="196" rx="12" fill="#ffffff" opacity="0.04" />
+          <path class="area" d="M64 150 L112 128 L160 138 L208 102 L256 114 L304 74 L352 88 L406 52 L406 176 L64 176 Z" fill="var(--brand)" opacity="0.14" />
+          <path class="line" d="M64 150 L112 128 L160 138 L208 102 L256 114 L304 74 L352 88 L406 52" fill="none" stroke="var(--brand)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          {[[112,128],[208,102],[304,74],[406,52]].map(([cx, cy]) => (
+            <circle cx={cx} cy={cy} r="4" fill="var(--brand)" stroke="#1a0f12" stroke-width="2" />
+          ))}
+          <circle class="pulse" cx="406" cy="52" r="7" fill="var(--brand)" opacity="0.4" />
+        </g>
+      </g>
+    )}
+
+    {variant === 'whyus' && (
+      <g>
+        <text x="48" y="52" class="lbl">TIME TO PRODUCTION</text>
+        <line x1="48" y1="84" x2="412" y2="84" stroke="#ffffff" stroke-opacity="0.12" stroke-dasharray="4 5" />
+        {/* bars: AcePointe fast (short) in red, others slow (tall) grey */}
+        {[
+          { x: 66, h: 78, red: true, t: 'ACEPOINTE' },
+          { x: 168, h: 168, red: false, t: 'INTEGRATORS' },
+          { x: 258, h: 140, red: false, t: 'PLATFORMS' },
+          { x: 348, h: 196, red: false, t: 'STAFFING' },
+        ].map((b) => (
+          <g>
+            <rect x={b.x} y={330 - b.h} width="56" height={b.h} rx="8" fill={b.red ? 'url(#phvRed)' : '#ffffff'} opacity={b.red ? '1' : '0.08'} />
+            {b.red && <text x={b.x + 28} y={330 - b.h - 12} class="badge" text-anchor="middle">FASTEST</text>}
+            <text x={b.x + 28} y="350" class="tick" text-anchor="middle">{b.t}</text>
+          </g>
+        ))}
+        <line x1="48" y1="330" x2="412" y2="330" stroke="#ffffff" stroke-opacity="0.18" />
+      </g>
+    )}
+  </svg>
+</div>
+
+<style>
+  .phv {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    max-width: 460px;
+    margin-inline: auto;
+  }
+  .phv::before {
+    content: '';
+    position: absolute;
+    inset: -18% -16%;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse 58% 56% at 58% 50%,
+      color-mix(in srgb, var(--brand) 60%, transparent),
+      color-mix(in srgb, var(--brand) 22%, transparent) 42%,
+      transparent 70%
+    );
+    filter: blur(36px);
+  }
+  .phv svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 26px 54px rgba(40, 10, 18, 0.34));
+  }
+  .lbl {
+    fill: rgba(255, 255, 255, 0.82);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+  .lbl-lg {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .metric {
+    fill: var(--brand-light);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 24px;
+  }
+  .cap {
+    fill: rgba(255, 255, 255, 0.6);
+    font-family: var(--font-body);
+    font-size: 10px;
+  }
+  .tick {
+    fill: rgba(255, 255, 255, 0.55);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+  }
+  .badge {
+    fill: var(--brand-light);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+  }
+  .pulse {
+    animation: phv-pulse 2.4s ease-in-out infinite;
+    transform-origin: 406px 202px;
+  }
+  @keyframes phv-pulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.1; transform: scale(1.6); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pulse { animation: none; }
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import PageHeroVisual from '../components/PageHeroVisual.astro';
 import CompareTable from '../components/CompareTable.astro';
 import CtaBand from '../components/CtaBand.astro';
 import SectionHeader from '../components/SectionHeader.astro';
@@ -36,6 +37,7 @@ const diffs = [
       with customers instead of selling slide decks. That's been our model from day one, at budgets
       that don't require a Fortune 500 line item.
     </Fragment>
+    <PageHeroVisual variant="whyus" slot="visual" />
   </PageHero>
 
   <section class="section container">

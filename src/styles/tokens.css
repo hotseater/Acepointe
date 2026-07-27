@@ -20,7 +20,7 @@
   --muted: #6b6c73; /* labels/captions — darkened from prototype #8a8b92 for AA */
   --bg: #fafafa; /* page */
   --surface: #ffffff; /* cards */
-  --dark: #221419; /* dark bands + footer */
+  --dark: #160d12; /* dark bands + footer — deep near-black, brand-warm */
   --on-dark: #ffffff;
   --on-dark-muted: rgba(255, 255, 255, 0.72);
 

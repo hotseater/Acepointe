@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import PageHeroVisual from '../components/PageHeroVisual.astro';
 import StoryRow from '../components/StoryRow.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { caseStudies } from '../data/caseStudies';
@@ -22,6 +23,7 @@ const stats = [
       Every engagement below shipped to production and was handed over to the client's own team.
       Metrics are theirs, not ours.
     </Fragment>
+    <PageHeroVisual variant="stories" slot="visual" />
   </PageHero>
 
   <section class="stats">

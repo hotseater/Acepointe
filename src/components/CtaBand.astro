@@ -25,9 +25,24 @@ const { secondaryHref, secondaryLabel } = Astro.props;
 
 <style>
   .cta-band {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     background: var(--dark);
     color: var(--on-dark);
     margin-top: var(--space-3xl);
+  }
+  /* Soft brand glow so the dark band reads rich, not flat. */
+  .cta-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse 42% 120% at 88% 40%,
+      color-mix(in srgb, var(--brand) 38%, transparent),
+      transparent 62%
+    );
   }
   .cta-band__inner {
     display: flex;
