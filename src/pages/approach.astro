@@ -1,0 +1,243 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const steps = [
+  {
+    num: '01',
+    title: 'Embed',
+    when: 'Week 0–1',
+    body: 'Our engineers join your team on day one — your repos, your tools, your standups, your constraints. The first week is spent inside your environment, not in a discovery workshop: reading code, tracing data, and pairing with the people who know where the bodies are buried.',
+    points: [
+      'Access, environments, and working agreements on day one',
+      'Architecture and data reality-check against the goal',
+      'First scoped milestone agreed — in writing, outcome-based',
+    ],
+    icon: 'embed',
+  },
+  {
+    num: '02',
+    title: 'Build & ship',
+    when: 'Week 2 onward',
+    body: 'Working software early, then iterate in production. We aim for a first production release within weeks — a thin slice of the real system, not a proof of concept destined for a shelf. Your engineers pair with ours throughout; every decision is made in the open.',
+    points: [
+      'First production release in weeks, not quarters',
+      'Weekly demos against the agreed outcome',
+      'Paired delivery — your team co-owns every service from the first commit',
+    ],
+    icon: 'ship',
+  },
+  {
+    num: '03',
+    title: 'Transfer',
+    when: 'Planned from day one',
+    body: 'We plan our own exit from the first commit. Documentation, runbooks, and governance are part of the definition of done — not a handover phase bolted on at the end. Success is when your team ships the next feature without us.',
+    points: [
+      'You own everything — code, platform, infrastructure, docs',
+      'Runbooks and on-call knowledge transferred, not just repos',
+      'Optional light-touch support after roll-off, on your terms',
+    ],
+    icon: 'transfer',
+  },
+];
+
+const principles = [
+  {
+    title: 'Production or it didn’t happen',
+    body: 'Prototypes are a means, never the deliverable. Every engagement is scoped to something running in production.',
+  },
+  {
+    title: 'Senior people, small teams',
+    body: 'The team you meet is the team that delivers. 2–5 senior engineers, never a bench of juniors billed at scale.',
+  },
+  {
+    title: 'Your stack, not ours',
+    body: 'We build with the tools your team can run. No proprietary platform, no lock-in, no license we profit from.',
+  },
+  {
+    title: 'Exit planned from day one',
+    body: 'Our incentive is your independence. Engagements are outcome-scoped, so lingering costs us, not you.',
+  },
+];
+---
+
+<BaseLayout
+  title="Approach"
+  description="No discovery theater, no slide-deck consulting, no dependency by design. How an AcePointe engagement actually works, week by week: Embed, Build & ship, Transfer."
+>
+  <PageHero eyebrow="Approach">
+    <Fragment slot="title">Embed. Build. <span class="accent">Ship.</span></Fragment>
+    <Fragment slot="intro">
+      No discovery theater, no slide-deck consulting, no dependency by design. Here's what an
+      AcePointe engagement actually looks like, week by week.
+    </Fragment>
+  </PageHero>
+
+  <section class="section container steps">
+    {
+      steps.map((step) => (
+        <article class="step" data-reveal>
+          <div class="step__aside">
+            <span class="step__badge" aria-hidden="true">
+              {step.icon === 'embed' && (
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2" /><path d="M3.5 20c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5" /><path d="M18 8v6" /><path d="M15 11h6" /></svg>
+              )}
+              {step.icon === 'ship' && (
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z" /><path d="M3 8l9 5 9-5" /><path d="M12 13v8" /></svg>
+              )}
+              {step.icon === 'transfer' && (
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13" /><path d="M13 4l4 4-4 4" /><path d="M20 16H7" /><path d="M11 20l-4-4 4-4" /></svg>
+              )}
+            </span>
+            <span class="step__num">{step.num}</span>
+            <h2 class="step__title">{step.title}</h2>
+            <span class="step__when">{step.when}</span>
+          </div>
+          <div class="step__main">
+            <p>{step.body}</p>
+            <ul>
+              {step.points.map((p) => <li>{p}</li>)}
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="principles">
+    <div class="container">
+      <p class="principles__eyebrow">Principles</p>
+      <h2 class="principles__title">The rules we don't break.</h2>
+      <div class="principles__grid">
+        {
+          principles.map((p) => (
+            <div class="principle" data-reveal>
+              <h3>{p.title}</h3>
+              <p>{p.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand secondaryHref="/success-stories" secondaryLabel="SUCCESS STORIES">
+    <Fragment slot="title">Ready when you are.</Fragment>
+    <Fragment slot="text">Bring the goal and the constraints. We'll bring the shortest path to production.</Fragment>
+  </CtaBand>
+</BaseLayout>
+
+<style>
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(28px, 3vw, 44px);
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 56px;
+  }
+  .step__badge {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: var(--brand-tint);
+    color: var(--brand);
+    display: grid;
+    place-items: center;
+    margin-bottom: 18px;
+  }
+  .step__num {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 52px;
+    color: var(--brand);
+    line-height: 1;
+  }
+  .step__title {
+    font-size: 26px;
+    margin: 10px 0 0;
+  }
+  .step__when {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+  .step__main p {
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 0 0 18px;
+  }
+  .step__main ul {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .step__main li::marker {
+    color: var(--brand);
+  }
+
+  .principles {
+    background: var(--dark);
+    color: var(--on-dark);
+    padding-block: clamp(3.5rem, 2.5rem + 4vw, 5.6rem);
+    margin-top: var(--space-3xl);
+  }
+  .principles__eyebrow {
+    font-size: var(--step--1);
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--brand-light);
+    margin-bottom: 14px;
+  }
+  .principles__title {
+    color: var(--on-dark);
+    font-size: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
+    letter-spacing: var(--tracking-display);
+    margin: 0 0 48px;
+    max-width: 640px;
+  }
+  .principles__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 64px;
+  }
+  .principle h3 {
+    color: var(--on-dark);
+    font-size: 19px;
+    margin: 0 0 8px;
+  }
+  .principle p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--on-dark-muted);
+    margin: 0;
+  }
+
+  @media (max-width: 820px) {
+    .step {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .principles__grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+</style>

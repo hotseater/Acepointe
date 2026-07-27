@@ -1,0 +1,205 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import Button from '../components/Button.astro';
+import HeroDiagram from '../components/HeroDiagram.astro';
+import LogoCarousel from '../components/LogoCarousel.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import WorkCarousel from '../components/WorkCarousel.astro';
+import ApproachBand from '../components/ApproachBand.astro';
+import CompareTable from '../components/CompareTable.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { site } from '../config';
+import { services } from '../data/services';
+---
+
+<BaseLayout
+  title={site.name}
+  description="AcePointe's forward-deployed engineers join your team, build in your environment, and ship production data and AI systems — and stay until it works."
+>
+  <!-- HERO -->
+  <section id="top" class="hero">
+    <div class="container hero__inner">
+      <div class="hero__copy">
+        <p class="eyebrow load-rise" style="--rise-delay:0ms">{site.tagline}</p>
+        <h1 class="hero__title">
+          <span class="hero__word load-rise" style="--rise-delay:120ms">Embed.</span>
+          <span class="hero__word load-rise" style="--rise-delay:260ms">Build.</span>
+          <span class="hero__word accent load-rise" style="--rise-delay:400ms">Ship.</span>
+        </h1>
+        <p class="hero__lead load-rise" style="--rise-delay:520ms">
+          AcePointe's forward-deployed engineers join your team, build in your environment, and ship
+          production data and AI systems — and stay until it works.
+        </p>
+        <div class="hero__actions load-rise" style="--rise-delay:620ms">
+          <Button href="/contact" variant="primary" size="lg">BOOK A CONSULTATION</Button>
+          <Button href="#work" variant="secondary" size="lg">SEE OUR WORK</Button>
+        </div>
+      </div>
+      <div class="hero__visual load-rise" style="--rise-delay:340ms">
+        <HeroDiagram />
+      </div>
+    </div>
+    <LogoCarousel />
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="section container">
+    <SectionHeader align="center" class="services__head">
+      <Fragment slot="title">Our <span class="accent">expertise</span></Fragment>
+      <Fragment slot="lead">
+        We partner with your team to deliver full end-to-end data and AI solutions — from strategy
+        to production, not just advice.
+      </Fragment>
+    </SectionHeader>
+    <div class="services__grid">
+      {services.map((service, i) => <ServiceCard service={service} index={i} />)}
+    </div>
+  </section>
+
+  <!-- RECENT WORK -->
+  <section id="work" class="section container">
+    <div class="work__head">
+      <SectionHeader>
+        <Fragment slot="title">Recent <span class="accent">work</span></Fragment>
+      </SectionHeader>
+      <p class="work__intro">
+        Real outcomes for clients in insurance, healthcare, education, and real estate.
+      </p>
+    </div>
+    <WorkCarousel />
+  </section>
+
+  <!-- APPROACH (dark band) -->
+  <ApproachBand />
+
+  <!-- COMPARE -->
+  <section id="compare" class="section container">
+    <SectionHeader align="center">
+      <Fragment slot="title">How we <span class="accent">compare</span></Fragment>
+      <Fragment slot="lead">
+        The market is shifting from advice to outcomes — the biggest names in AI now embed engineers
+        with customers instead of selling slide decks. That's been our model from day one.
+      </Fragment>
+    </SectionHeader>
+    <CompareTable />
+  </section>
+
+  <!-- CONTACT -->
+  <ContactSection />
+</BaseLayout>
+
+<style>
+  .hero {
+    background: linear-gradient(180deg, var(--brand-hero-tint) 0%, var(--bg) 100%);
+    padding-top: clamp(3.5rem, 2rem + 6vw, 6rem);
+  }
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 64px;
+    align-items: center;
+    padding-bottom: 72px;
+  }
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .eyebrow {
+    margin-bottom: 20px;
+  }
+  .hero__title {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-size: clamp(3rem, 2.6rem + 4vw, 5.25rem);
+    font-weight: 700;
+    line-height: 0.94;
+    letter-spacing: -0.035em;
+  }
+  .hero__word {
+    display: block;
+  }
+  .hero__title .accent {
+    color: var(--brand);
+  }
+  .hero__lead {
+    font-size: var(--step-1);
+    max-width: 540px;
+    margin: 30px 0 38px;
+  }
+
+  .hero__visual {
+    position: relative;
+    isolation: isolate;
+  }
+  /* Brand-glow halo so the dark diagram anchors the hero and pops off the light bg. */
+  .hero__visual::before {
+    content: '';
+    position: absolute;
+    inset: -14% -16%;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse 60% 58% at 60% 46%,
+      color-mix(in srgb, var(--brand) 48%, transparent),
+      color-mix(in srgb, var(--brand) 16%, transparent) 46%,
+      transparent 72%
+    );
+    filter: blur(32px);
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .services__head {
+    margin-bottom: 56px;
+  }
+  .services__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  .work__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 40px;
+    margin-bottom: 48px;
+  }
+  .work__intro {
+    font-size: 17px;
+    color: var(--body);
+    max-width: 400px;
+  }
+
+  @media (max-width: 980px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .hero__visual {
+      order: 2;
+      max-width: 480px;
+    }
+    .services__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 720px) {
+    .work__head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+  }
+  @media (max-width: 560px) {
+    .services__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

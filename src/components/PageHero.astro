@@ -1,0 +1,53 @@
+---
+/** Shared inner-page hero: eyebrow + title + intro (+ optional actions). */
+interface Props {
+  eyebrow: string;
+}
+const { eyebrow } = Astro.props;
+const hasActions = Astro.slots.has('actions');
+---
+
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow load-rise" style="--rise-delay:0ms">{eyebrow}</p>
+    <h1 class="load-rise" style="--rise-delay:90ms"><slot name="title" /></h1>
+    <p class="page-hero__intro load-rise" style="--rise-delay:180ms"><slot name="intro" /></p>
+    {hasActions && (
+      <div class="page-hero__actions load-rise" style="--rise-delay:280ms">
+        <slot name="actions" />
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    background: linear-gradient(180deg, var(--brand-hero-tint) 0%, var(--bg) 100%);
+    padding-block: clamp(3rem, 2rem + 4vw, 5rem) clamp(2.5rem, 2rem + 3vw, 3.5rem);
+  }
+  .eyebrow {
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: clamp(2.25rem, 1.5rem + 3.4vw, 3.5rem);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.1;
+    margin: 0;
+    max-width: 20ch;
+  }
+  h1 :global(.accent) {
+    color: var(--brand);
+  }
+  .page-hero__intro {
+    font-size: var(--step-1);
+    color: var(--body);
+    max-width: 64ch;
+    margin: 22px 0 0;
+  }
+  .page-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 32px;
+  }
+</style>

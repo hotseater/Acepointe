@@ -1,0 +1,196 @@
+---
+/**
+ * CaseScene — crafted SVG "product artifact" per case study, replacing the
+ * generated placeholder rasters. Data-viz / UI style (not sketch illustration).
+ * One visual language across all four; subtle motion on reveal + light idle.
+ */
+import type { SceneId } from '../data/caseStudies';
+interface Props {
+  scene: SceneId;
+}
+const { scene } = Astro.props;
+---
+
+<div class:list={['scene', `scene--${scene}`]} aria-hidden="true">
+  {scene === 'insurance' && (
+    <svg viewBox="0 0 480 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="480" height="220" fill="var(--brand-tint)" />
+      {/* incoming lead rows, scored */}
+      {[0, 1, 2, 3].map((i) => (
+        <g transform={`translate(40 ${44 + i * 34})`}>
+          <rect width="150" height="20" rx="6" fill="#fff" />
+          <circle cx="14" cy="10" r="5" fill={i < 2 ? 'var(--brand)' : '#c9c4c6'} />
+          <rect x="28" y="7" width="72" height="6" rx="3" fill="#d9d2d4" />
+          <rect class="score" style={`--i:${i}`} x="112" y="6" width={i < 2 ? 30 : 16} height="8" rx="4" fill={i < 2 ? 'var(--brand)' : '#e3b9c0'} />
+        </g>
+      ))}
+      {/* scoring gauge */}
+      <g transform="translate(360 110)">
+        <circle r="58" fill="#fff" />
+        <circle r="46" fill="none" stroke="#eee0e3" stroke-width="10" />
+        <circle class="gauge" r="46" fill="none" stroke="var(--brand)" stroke-width="10" stroke-linecap="round"
+          stroke-dasharray="289" stroke-dashoffset="96" transform="rotate(-90)" />
+        <text text-anchor="middle" y="-2" class="gm">3.1×</text>
+        <text text-anchor="middle" y="18" class="gs">intent</text>
+      </g>
+      <path d="M198 90 h150" stroke="var(--brand)" stroke-width="2" stroke-dasharray="3 5" opacity="0.5" />
+    </svg>
+  )}
+
+  {scene === 'healthcare' && (
+    <svg viewBox="0 0 480 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="480" height="220" fill="var(--brand-tint)" />
+      {/* voice waveform */}
+      <g transform="translate(40 110)">
+        {Array.from({ length: 18 }).map((_, i) => {
+          const h = [16, 30, 22, 44, 60, 38, 52, 28, 66, 40, 24, 48, 34, 58, 26, 42, 20, 30][i];
+          return <rect class="wave" style={`--i:${i}`} x={i * 9} y={-h / 2} width="4" height={h} rx="2" fill={i % 3 === 0 ? 'var(--brand)' : 'var(--brand-light)'} />;
+        })}
+      </g>
+      <path class="flow" d="M212 110 h44" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah)" />
+      <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--brand)" /></marker></defs>
+      {/* structured report */}
+      <g transform="translate(270 44)">
+        <rect width="170" height="132" rx="10" fill="#fff" />
+        <rect x="18" y="20" width="70" height="8" rx="4" fill="var(--ink)" />
+        {[0, 1, 2, 3].map((i) => (
+          <g transform={`translate(18 ${44 + i * 22})`}>
+            <rect class="field" style={`--i:${i}`} width="10" height="10" rx="3" fill="var(--brand)" />
+            <rect x="20" y="1" width={[110, 90, 120, 78][i]} height="8" rx="4" fill="#e6dfe1" />
+          </g>
+        ))}
+      </g>
+    </svg>
+  )}
+
+  {scene === 'nooktek' && (
+    <svg viewBox="0 0 480 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="480" height="220" fill="var(--brand-tint)" />
+      {/* end-to-end stack: data -> model -> app */}
+      {[
+        { y: 40, label: 'DATA PLATFORM', w: 300 },
+        { y: 92, label: 'AI MODELS', w: 240 },
+        { y: 144, label: 'LEARNING APP', w: 180 },
+      ].map((row, i) => (
+        <g transform={`translate(60 ${row.y})`}>
+          <rect class="layer" style={`--i:${i}`} width={row.w} height="36" rx="9" fill="#fff" />
+          <rect x="0" y="0" width="4" height="36" rx="2" fill="var(--brand)" />
+          <rect x="18" y="14" width="90" height="8" rx="4" fill="#d9d2d4" />
+          <circle cx={row.w - 22} cy="18" r="7" fill="var(--brand-tint)" />
+          <circle cx={row.w - 22} cy="18" r="3" fill="var(--brand)" />
+        </g>
+      ))}
+      <path class="conn" d="M120 76 v16 M120 128 v16" stroke="var(--brand)" stroke-width="2" stroke-dasharray="3 4" />
+      {/* copilot spark */}
+      <g transform="translate(392 60)">
+        <circle class="spark" r="20" fill="var(--brand)" opacity="0.12" />
+        <path d="M0 -10 L3 -3 L10 0 L3 3 L0 10 L-3 3 L-10 0 L-3 -3 Z" fill="var(--brand)" />
+      </g>
+    </svg>
+  )}
+
+  {scene === 'radix' && (
+    <svg viewBox="0 0 480 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="480" height="220" fill="var(--brand-tint)" />
+      <g transform="translate(36 30)">
+        <rect width="408" height="160" rx="12" fill="#fff" />
+        {/* live pill */}
+        <g transform="translate(20 20)">
+          <rect width="58" height="20" rx="10" fill="var(--brand-tint)" />
+          <circle class="live" cx="14" cy="10" r="4" fill="var(--brand)" />
+          <text x="26" y="14" class="live-t">LIVE</text>
+        </g>
+        {/* area chart */}
+        <path class="area" d="M20 130 L60 108 L100 116 L140 84 L180 96 L220 60 L260 74 L300 44 L340 58 L388 34 L388 140 L20 140 Z" fill="var(--brand)" opacity="0.12" />
+        <path class="line" d="M20 130 L60 108 L100 116 L140 84 L180 96 L220 60 L260 74 L300 44 L340 58 L388 34"
+          fill="none" stroke="var(--brand)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        {[60, 140, 220, 300, 388].map((x, i) => (
+          <circle class="dot" style={`--i:${i}`} cx={x} cy={[108, 84, 60, 44, 34][i]} r="3.5" fill="var(--brand)" stroke="#fff" stroke-width="2" />
+        ))}
+      </g>
+    </svg>
+  )}
+</div>
+
+<style>
+  .scene {
+    width: 100%;
+    height: 100%;
+  }
+  .scene svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .gm { fill: var(--brand); font-family: var(--font-display); font-weight: 700; font-size: 22px; }
+  .gs { fill: var(--muted); font-family: var(--font-body); font-size: 11px; letter-spacing: 0.08em; }
+  .live-t { fill: var(--brand); font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: 0.1em; }
+
+  /* idle motion */
+  .scene--radix .live { animation: blink 1.8s ease-in-out infinite; transform-origin: center; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+  /* pre-reveal states (JS only) */
+  .has-js .score,
+  .has-js .field,
+  .has-js .layer { transform: scaleX(0); transform-origin: left; }
+  .has-js .wave { transform: scaleY(0.15); transform-origin: center; }
+  .has-js .gauge { stroke-dashoffset: 289; }
+  .has-js .line { stroke-dasharray: 460; stroke-dashoffset: 460; }
+  .has-js .area,
+  .has-js .dot,
+  .has-js .spark { opacity: 0; }
+
+  /* play when the scene scrolls into view */
+  .has-js .scene.play .score { animation: growX 0.6s var(--ease-out-expo) forwards; animation-delay: calc(var(--i) * 0.1s); }
+  .has-js .scene.play .field { animation: growX 0.5s var(--ease-out-quart) forwards; animation-delay: calc(0.2s + var(--i) * 0.1s); }
+  .has-js .scene.play .layer { animation: growX 0.6s var(--ease-out-expo) forwards; animation-delay: calc(var(--i) * 0.12s); }
+  .has-js .scene.play .wave { animation: growY 0.5s var(--ease-out-quart) forwards; animation-delay: calc(var(--i) * 0.04s); }
+  .has-js .scene.play .gauge { animation: gauge 1.1s var(--ease-out-expo) forwards 0.2s; }
+  .has-js .scene.play .line { animation: draw 1.1s var(--ease-out-expo) forwards 0.2s; }
+  .has-js .scene.play .area { animation: fade-soft 0.8s ease forwards 0.5s; }
+  .has-js .scene.play .spark { animation: fade-soft 0.5s ease forwards 0.3s; }
+  .has-js .scene.play .dot { animation: fade 0.4s ease forwards; animation-delay: calc(0.6s + var(--i) * 0.08s); }
+
+  @keyframes growX { to { transform: scaleX(1); } }
+  @keyframes growY { to { transform: scaleY(1); } }
+  @keyframes gauge { to { stroke-dashoffset: 96; } }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes fade { to { opacity: 1; } }
+  @keyframes fade-soft { to { opacity: 0.12; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .has-js .score,
+    .has-js .field,
+    .has-js .layer,
+    .has-js .wave { transform: none; }
+    .has-js .gauge { stroke-dashoffset: 96; }
+    .has-js .line { stroke-dashoffset: 0; }
+    .has-js .area,
+    .has-js .spark { opacity: 0.12; }
+    .has-js .dot { opacity: 1; }
+    .scene--radix .live { animation: none; }
+  }
+</style>
+
+<script>
+  const scenes = document.querySelectorAll<HTMLElement>('.scene');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('play');
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.25 },
+    );
+    scenes.forEach((s) => io.observe(s));
+    // Failsafe: guarantee scenes are never left in their hidden pre-play state.
+    window.setTimeout(() => scenes.forEach((s) => s.classList.add('play')), 3800);
+  } else {
+    scenes.forEach((s) => s.classList.add('play'));
+  }
+</script>

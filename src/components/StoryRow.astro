@@ -1,0 +1,145 @@
+---
+import CaseScene from './CaseScene.astro';
+import type { CaseStudy } from '../data/caseStudies';
+interface Props {
+  study: CaseStudy;
+  index: number;
+}
+const { study, index } = Astro.props;
+const flip = index % 2 === 1; // alternate scene side
+const href = `/case-studies/${study.slug}`;
+const metrics = study.results.slice(0, 2);
+---
+
+<article class:list={['story', { 'story--flip': flip }]} data-reveal>
+  <a class="story__media" href={href} tabindex="-1" aria-hidden="true">
+    <CaseScene scene={study.scene} />
+  </a>
+  <div class="story__body">
+    <p class="story__cat">{study.category}</p>
+    <h2 class="story__title"><a href={href}>{study.title}</a></h2>
+    <p class="story__summary">{study.summary}</p>
+    <div class="story__metrics">
+      {
+        metrics.map((m) => (
+          <div class="story__metric">
+            <span class="story__value">{m.value}</span>
+            <span class="story__label">{m.label}</span>
+          </div>
+        ))
+      }
+    </div>
+    <a class="story__link" href={href}>Read the story <span aria-hidden="true">&rarr;</span></a>
+  </div>
+</article>
+
+<style>
+  .story {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition:
+      transform var(--dur) var(--ease-out-quart),
+      box-shadow var(--dur) ease;
+  }
+  .story:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-lift);
+  }
+  .story--flip {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+  .story--flip .story__media {
+    order: 2;
+  }
+
+  .story__media {
+    display: block;
+    min-height: 300px;
+    background: var(--brand-tint);
+  }
+  .story__body {
+    padding: clamp(28px, 3vw, 44px);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    justify-content: center;
+  }
+  .story__cat {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--brand);
+  }
+  .story__title {
+    font-size: clamp(1.3rem, 1.1rem + 1vw, 1.7rem);
+    line-height: 1.3;
+    margin: 0;
+  }
+  .story__title a {
+    color: var(--ink);
+  }
+  .story__title a:hover {
+    color: var(--brand);
+  }
+  .story__summary {
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: var(--body);
+  }
+  .story__metrics {
+    display: flex;
+    gap: 36px;
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+    margin-top: 4px;
+  }
+  .story__value {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--brand);
+    line-height: 1.1;
+  }
+  .story__label {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--body);
+  }
+  .story__link {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-top: 2px;
+  }
+  .story__link span {
+    display: inline-block;
+    transition: transform var(--dur) var(--ease-out-quart);
+  }
+  .story__link:hover span {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 780px) {
+    .story,
+    .story--flip {
+      grid-template-columns: 1fr;
+    }
+    .story--flip .story__media {
+      order: 0;
+    }
+    .story__media {
+      min-height: 200px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .story:hover {
+      transform: none;
+    }
+  }
+</style>

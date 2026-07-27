@@ -1,0 +1,110 @@
+/* ==========================================================================
+   AcePointe — Design Tokens
+   Single source of truth for color, type, space, radius, shadow, motion, z.
+   Palette is themeable: default "crimson" (brand); [data-palette] overrides.
+   ========================================================================== */
+
+:root {
+  /* --- Brand (crimson — committed identity, do not drift) --------------- */
+  --brand: #c8102e;
+  --brand-deep: #9c0c23; /* gradient end */
+  --brand-light: #f08a9b; /* accent on dark bands */
+  --brand-tint: #faf1f2; /* red-warmed off-white */
+  --brand-hero-tint: #faf3f4;
+  --brand-glow: rgba(200, 16, 46, 0.25);
+  --brand-gradient: linear-gradient(180deg, var(--brand) 0%, var(--brand-deep) 100%);
+
+  /* --- Neutrals -------------------------------------------------------- */
+  --ink: #25262b; /* headings */
+  --body: #4c4d54; /* body copy */
+  --muted: #6b6c73; /* labels/captions — darkened from prototype #8a8b92 for AA */
+  --bg: #fafafa; /* page */
+  --surface: #ffffff; /* cards */
+  --dark: #221419; /* dark bands + footer */
+  --on-dark: #ffffff;
+  --on-dark-muted: rgba(255, 255, 255, 0.72);
+
+  /* --- Borders --------------------------------------------------------- */
+  --border: #ececef; /* hairlines / cards */
+  --border-strong: #d9d9de; /* secondary buttons / dots */
+  --border-input: #e5e5ea;
+  --border-table: #e6e6ea;
+
+  /* --- Typography ------------------------------------------------------ */
+  --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Hanken Grotesk', 'Segoe UI', system-ui, sans-serif;
+
+  /* Fluid modular scale (~1.25). clamp(min, fluid, max). */
+  --step--1: clamp(0.83rem, 0.79rem + 0.18vw, 0.94rem);
+  --step-0: clamp(0.95rem, 0.91rem + 0.2vw, 1.06rem); /* body ~15–17px */
+  --step-1: clamp(1.13rem, 1.05rem + 0.4vw, 1.35rem);
+  --step-2: clamp(1.35rem, 1.2rem + 0.75vw, 1.9rem);
+  --step-3: clamp(1.7rem, 1.4rem + 1.5vw, 2.9rem); /* H2 ~46px */
+  --step-4: clamp(2.4rem, 1.7rem + 3.5vw, 4.25rem); /* H1 ~68px, ceiling < 6rem */
+
+  --lh-tight: 1.12;
+  --lh-snug: 1.35;
+  --lh-body: 1.7;
+  --tracking-eyebrow: 0.18em;
+  --tracking-display: -0.02em; /* floor -0.04em; never tighter */
+
+  /* --- Spacing --------------------------------------------------------- */
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: clamp(4rem, 3rem + 5vw, 6.25rem); /* section rhythm 80–100px */
+
+  --container: 1240px;
+  --gutter: clamp(1.25rem, 5vw, 2.5rem); /* 20 → 40px */
+
+  /* --- Radius (cards 12–16; pills full) -------------------------------- */
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  /* --- Shadow (one defined shadow, no ghost-card border+blur pairing) --- */
+  --shadow-card: 0 14px 32px rgba(40, 40, 50, 0.1);
+  --shadow-card-lift: 0 18px 40px rgba(40, 40, 50, 0.12);
+  --shadow-form: 0 12px 36px rgba(40, 40, 50, 0.08);
+  --shadow-cta: 0 10px 24px var(--brand-glow);
+  --shadow-cta-sm: 0 6px 16px var(--brand-glow);
+
+  /* --- Motion ---------------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-slide: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 0.15s;
+  --dur: 0.25s;
+  --dur-slow: 0.45s;
+
+  /* --- Semantic z-index scale ------------------------------------------ */
+  --z-base: 1;
+  --z-sticky: 50;
+  --z-drawer-backdrop: 60;
+  --z-drawer: 70;
+  --z-toast: 80;
+}
+
+/* Alternate build-time palettes (set data-palette on <html>). Crimson is default. */
+:root[data-palette='ruby'] {
+  --brand: #d92038;
+  --brand-deep: #a91127;
+  --brand-light: #ff8f9e;
+  --brand-tint: #f7f1ee;
+  --dark: #16181d;
+  --brand-glow: rgba(217, 32, 56, 0.25);
+}
+
+:root[data-palette='garnet'] {
+  --brand: #a81631;
+  --brand-deep: #7e0e23;
+  --brand-light: #e8a08c;
+  --brand-tint: #f5efe6;
+  --dark: #241a14;
+  --brand-glow: rgba(168, 22, 49, 0.25);
+}

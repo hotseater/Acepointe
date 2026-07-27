@@ -1,0 +1,199 @@
+---
+/**
+ * HeroDiagram — Embed → Build → Ship, as crafted animated SVG.
+ * Replaces the raster hero-flow.png: crisp at any DPI, themeable, animated.
+ * Fully visible by default; entrance animation only under .has-js + motion-ok.
+ */
+---
+
+<div class="hero-diagram" role="img" aria-label="AcePointe's model: engineers embed with your team, build in your environment, and ship to production in weeks.">
+  <svg viewBox="0 0 600 440" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <linearGradient id="panelBg" x1="0" y1="0" x2="600" y2="440" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#2a171d" />
+        <stop offset="1" stop-color="#1c1013" />
+      </linearGradient>
+      <linearGradient id="redFill" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="var(--brand)" />
+        <stop offset="1" stop-color="var(--brand-deep)" />
+      </linearGradient>
+    </defs>
+
+    <!-- panel -->
+    <rect x="0" y="0" width="600" height="440" rx="20" fill="url(#panelBg)" />
+    <g opacity="0.5">
+      {Array.from({ length: 11 }).map((_, r) =>
+        Array.from({ length: 15 }).map((_, c) => (
+          <circle cx={20 + c * 40} cy={20 + r * 40} r="1.1" fill="#ffffff" opacity="0.06" />
+        )),
+      )}
+    </g>
+
+    <!-- connectors (draw in) -->
+    <path class="connector c1" d="M150 300 C 210 300, 210 250, 258 250" stroke="var(--brand)" stroke-width="2" stroke-dasharray="4 5" stroke-linecap="round" />
+    <path class="connector c2" d="M452 210 C 500 210, 500 150, 470 130" stroke="var(--brand)" stroke-width="2" stroke-dasharray="4 5" stroke-linecap="round" />
+
+    <!-- CARD 1 — EMBED -->
+    <g class="card card1">
+      <rect x="34" y="238" width="196" height="150" rx="14" fill="#ffffff" opacity="0.05" />
+      <rect x="34" y="238" width="196" height="150" rx="14" fill="none" stroke="#ffffff" stroke-opacity="0.08" />
+      <text x="54" y="272" class="label">EMBED</text>
+      <rect x="54" y="280" width="26" height="3" rx="1.5" fill="var(--brand)" />
+      <!-- team row: greys + two brand (the embedded engineers) -->
+      <g transform="translate(54 312)">
+        <g class="avatar" style="--i:0"><circle cx="0" cy="10" r="12" fill="#6b6c73" /><circle cx="0" cy="6" r="4.5" fill="#1c1013" opacity="0.35" /></g>
+        <g class="avatar" style="--i:1"><circle cx="30" cy="10" r="12" fill="#6b6c73" /><circle cx="30" cy="6" r="4.5" fill="#1c1013" opacity="0.35" /></g>
+        <g class="avatar" style="--i:2"><circle cx="60" cy="10" r="12" fill="#6b6c73" /><circle cx="60" cy="6" r="4.5" fill="#1c1013" opacity="0.35" /></g>
+        <g class="avatar join" style="--i:3"><circle cx="98" cy="10" r="13" fill="url(#redFill)" /><circle cx="98" cy="6" r="4.8" fill="#fff" opacity="0.85" /></g>
+        <g class="avatar join" style="--i:4"><circle cx="130" cy="10" r="13" fill="var(--brand-light)" /><circle cx="130" cy="6" r="4.8" fill="#1c1013" opacity="0.3" /></g>
+        <path class="join-arc" d="M78 4 Q 104 -22 130 4" stroke="var(--brand)" stroke-width="2" stroke-dasharray="3 4" fill="none" stroke-linecap="round" />
+      </g>
+    </g>
+
+    <!-- CARD 2 — BUILD -->
+    <g class="card card2">
+      <rect x="256" y="176" width="212" height="150" rx="14" fill="#ffffff" opacity="0.05" />
+      <rect x="256" y="176" width="212" height="150" rx="14" fill="none" stroke="#ffffff" stroke-opacity="0.08" />
+      <text x="278" y="210" class="label">BUILD</text>
+      <rect x="278" y="218" width="24" height="3" rx="1.5" fill="var(--brand)" />
+      <!-- terminal -->
+      <rect x="278" y="234" width="168" height="76" rx="8" fill="#120a0d" />
+      <circle cx="292" cy="248" r="3" fill="#ff5f57" /><circle cx="304" cy="248" r="3" fill="#febc2e" /><circle cx="316" cy="248" r="3" fill="#28c840" />
+      <g class="code">
+        <rect class="ln" style="--i:0" x="292" y="262" width="120" height="5" rx="2.5" fill="var(--brand)" />
+        <rect class="ln" style="--i:1" x="302" y="274" width="80" height="5" rx="2.5" fill="#ffffff" opacity="0.35" />
+        <rect class="ln" style="--i:2" x="302" y="286" width="104" height="5" rx="2.5" fill="var(--brand-light)" opacity="0.7" />
+        <rect class="ln" style="--i:3" x="292" y="298" width="70" height="5" rx="2.5" fill="#ffffff" opacity="0.35" />
+      </g>
+    </g>
+
+    <!-- CARD 3 — SHIP -->
+    <g class="card card3">
+      <rect x="366" y="52" width="200" height="132" rx="14" fill="#ffffff" opacity="0.06" />
+      <rect x="366" y="52" width="200" height="132" rx="14" fill="none" stroke="#ffffff" stroke-opacity="0.1" />
+      <text x="388" y="86" class="label">SHIP</text>
+      <rect x="388" y="94" width="20" height="3" rx="1.5" fill="var(--brand)" />
+      <!-- check + live in prod -->
+      <circle cx="404" cy="128" r="17" fill="url(#redFill)" />
+      <path class="check" d="M396 128 l6 6 l11 -12" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <text x="430" y="124" class="ship-title">Live in prod</text>
+      <text x="430" y="141" class="ship-sub">weeks, not quarters</text>
+      <rect x="388" y="158" width="156" height="7" rx="3.5" fill="#ffffff" opacity="0.12" />
+      <rect class="progress" x="388" y="158" width="156" height="7" rx="3.5" fill="url(#redFill)" />
+      <circle class="live-dot" cx="551" cy="68" r="4" fill="var(--brand)" />
+    </g>
+  </svg>
+</div>
+
+<style>
+  .hero-diagram {
+    width: 100%;
+    max-width: 600px;
+    margin-inline: auto;
+  }
+  .hero-diagram svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 30px 60px rgba(40, 10, 18, 0.34));
+  }
+  .label {
+    fill: #fff;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+  }
+  .ship-title {
+    fill: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .ship-sub {
+    fill: rgba(255, 255, 255, 0.6);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+
+  /* live dot always breathes (subtle) */
+  .live-dot {
+    animation: pulse 2.4s ease-in-out infinite;
+    transform-origin: 551px 68px;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.5); }
+  }
+
+  /* --- Entrance animation: only under JS + motion-ok --- */
+  .has-js .hero-diagram .card {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .has-js .hero-diagram .connector {
+    stroke-dashoffset: 200;
+    stroke-dasharray: 200;
+  }
+  .has-js .hero-diagram .join-arc {
+    stroke-dashoffset: 90;
+    stroke-dasharray: 90;
+  }
+  .has-js .hero-diagram .avatar { opacity: 0; transform: translateY(6px); }
+  .has-js .hero-diagram .code .ln { transform: scaleX(0); transform-origin: left; }
+  .has-js .hero-diagram .check { stroke-dasharray: 32; stroke-dashoffset: 32; }
+  .has-js .hero-diagram .progress { transform: scaleX(0); transform-origin: left; }
+
+  .has-js .hero-diagram.play .card {
+    animation: card-in 0.7s var(--ease-out-expo) forwards;
+  }
+  .has-js .hero-diagram.play .card1 { animation-delay: 0.15s; }
+  .has-js .hero-diagram.play .card2 { animation-delay: 0.45s; }
+  .has-js .hero-diagram.play .card3 { animation-delay: 0.75s; }
+
+  .has-js .hero-diagram.play .avatar { animation: av-in 0.4s var(--ease-out-quart) forwards; animation-delay: calc(0.35s + var(--i) * 0.09s); }
+  .has-js .hero-diagram.play .join-arc { animation: draw 0.6s ease forwards 0.8s; }
+  .has-js .hero-diagram.play .c1 { animation: draw 0.6s ease forwards 0.6s; }
+  .has-js .hero-diagram.play .c2 { animation: draw 0.6s ease forwards 0.95s; }
+  .has-js .hero-diagram.play .code .ln { animation: type 0.4s var(--ease-out-quart) forwards; animation-delay: calc(0.6s + var(--i) * 0.12s); }
+  .has-js .hero-diagram.play .check { animation: draw 0.45s ease forwards 1.15s; }
+  .has-js .hero-diagram.play .progress { animation: fill-bar 1s var(--ease-out-expo) forwards 1s; }
+
+  @keyframes card-in { to { opacity: 1; transform: none; } }
+  @keyframes av-in { to { opacity: 1; transform: none; } }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes type { to { transform: scaleX(1); } }
+  @keyframes fill-bar { to { transform: scaleX(1); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .has-js .hero-diagram .card,
+    .has-js .hero-diagram .avatar { opacity: 1; transform: none; }
+    .has-js .hero-diagram .connector,
+    .has-js .hero-diagram .join-arc,
+    .has-js .hero-diagram .check { stroke-dashoffset: 0; }
+    .has-js .hero-diagram .code .ln,
+    .has-js .hero-diagram .progress { transform: none; }
+    .live-dot { animation: none; }
+  }
+</style>
+
+<script>
+  // Trigger the choreography once the diagram is in view (or immediately if already visible).
+  const el = document.currentScript?.previousElementSibling as HTMLElement | null;
+  const diagram = document.querySelector<HTMLElement>('.hero-diagram');
+  if (diagram) {
+    const play = () => diagram.classList.add('play');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { play(); io.disconnect(); }
+        });
+      }, { threshold: 0.3 });
+      io.observe(diagram);
+      // Failsafe: the hero is above the fold — never leave the diagram blank.
+      window.setTimeout(play, 2000);
+    } else {
+      play();
+    }
+  }
+</script>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+---
+
+<BaseLayout title="Page not found" description="The page you're looking for doesn't exist.">
+  <section class="notfound container">
+    <p class="notfound__code">404</p>
+    <h1>This page shipped somewhere else.</h1>
+    <p class="notfound__copy">
+      The page you're looking for doesn't exist or has moved. Let's get you back on track.
+    </p>
+    <div class="notfound__actions">
+      <Button href="/" variant="primary" size="lg">BACK HOME</Button>
+      <Button href="/success-stories" variant="secondary" size="lg">SEE OUR WORK</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    text-align: center;
+    padding-block: clamp(4rem, 3rem + 6vw, 8rem);
+    max-width: 640px;
+  }
+  .notfound__code {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(4rem, 3rem + 8vw, 7rem);
+    color: var(--brand);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .notfound h1 {
+    font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem);
+    letter-spacing: var(--tracking-display);
+    margin: 12px 0 16px;
+  }
+  .notfound__copy {
+    font-size: var(--step-1);
+    color: var(--body);
+    margin: 0 auto 32px;
+    max-width: 46ch;
+  }
+  .notfound__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+</style>

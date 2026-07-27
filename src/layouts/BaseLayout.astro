@@ -1,0 +1,87 @@
+---
+import { Font } from 'astro:assets';
+import { site } from '../config';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Absolute or root-relative OG image path. */
+  image?: string;
+}
+
+const { title, description, image = '/og-default.png' } = Astro.props;
+const fullTitle = title === site.name ? title : `${title} — ${site.name}`;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL(image, site.url).href;
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: site.url,
+  description: site.tagline,
+  telephone: site.phone,
+  email: site.email,
+  sameAs: [
+    'https://www.linkedin.com/company/acepointe/about/',
+    'https://www.facebook.com/AcePointe-100980914994319/',
+    'https://twitter.com/acepointe',
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en" data-palette={site.palette}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="theme-color" content="#c8102e" />
+
+    <!-- Flag JS synchronously so reveal pre-state applies before first paint. -->
+    <script is:inline>
+      document.documentElement.classList.add('has-js');
+    </script>
+
+    <!-- Self-hosted fonts (Astro Fonts API) -->
+    <Font cssVariable="--font-display" preload />
+    <Font cssVariable="--font-body" preload />
+
+    <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} is:inline />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <slot name="head" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import '../scripts/reveal.ts';
+    </script>
+  </body>
+</html>

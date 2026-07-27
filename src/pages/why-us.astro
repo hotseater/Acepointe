@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CompareTable from '../components/CompareTable.astro';
+import CtaBand from '../components/CtaBand.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+
+const diffs = [
+  {
+    title: 'Senior engineers, not account teams',
+    body: 'The people who scope your engagement are the people who build it. No pitch team, no bench, no handoffs between practices.',
+  },
+  {
+    title: 'Weeks to production, not quarters',
+    body: 'Our median engagement puts working software in production in six weeks. Momentum is the deliverable.',
+  },
+  {
+    title: 'No platform agenda',
+    body: "We don't resell a platform or take vendor commissions. Model and tooling choices are made on your economics, not ours.",
+  },
+  {
+    title: 'You own everything after',
+    body: 'Code, platform, docs, and the capability to run them. We plan our exit from day one — dependency is a bug, not a business model.',
+  },
+];
+---
+
+<BaseLayout
+  title="Why us"
+  description="The forward-deployed model, sized for the mid-market. Senior engineers embedded in your team, weeks to production, no platform agenda, and you own everything after."
+>
+  <PageHero eyebrow="Why AcePointe">
+    <Fragment slot="title">The forward-deployed model, sized for the <span class="accent">mid-market</span>.</Fragment>
+    <Fragment slot="intro">
+      The market is shifting from advice to outcomes — the biggest names in AI now embed engineers
+      with customers instead of selling slide decks. That's been our model from day one, at budgets
+      that don't require a Fortune 500 line item.
+    </Fragment>
+  </PageHero>
+
+  <section class="section container">
+    <div class="diffs">
+      {
+        diffs.map((d) => (
+          <div class="diff" data-reveal>
+            <h2>{d.title}</h2>
+            <p>{d.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section container">
+    <SectionHeader align="center">
+      <Fragment slot="title">How we <span class="accent">compare</span></Fragment>
+      <Fragment slot="lead">How AcePointe stacks up against the usual alternatives.</Fragment>
+    </SectionHeader>
+    <CompareTable />
+  </section>
+
+  <CtaBand secondaryHref="/success-stories" secondaryLabel="SUCCESS STORIES">
+    <Fragment slot="title">Judge us by what ships.</Fragment>
+    <Fragment slot="text">
+      Read the success stories, then bring us the problem you've been quoted a seven-figure program for.
+    </Fragment>
+  </CtaBand>
+</BaseLayout>
+
+<style>
+  .diffs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .diff {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 34px;
+  }
+  .diff h2 {
+    font-size: 20px;
+    margin: 0 0 10px;
+  }
+  .diff p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--body);
+    margin: 0;
+  }
+  @media (max-width: 720px) {
+    .diffs {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

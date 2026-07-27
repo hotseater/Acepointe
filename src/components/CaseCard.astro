@@ -1,0 +1,131 @@
+---
+import type { CaseStudy } from '../data/caseStudies';
+import CaseScene from './CaseScene.astro';
+interface Props {
+  study: CaseStudy;
+  /** carousel cards are fixed-width; grid cards are fluid */
+  variant?: 'carousel' | 'grid';
+}
+const { study, variant = 'grid' } = Astro.props;
+const href = `/case-studies/${study.slug}`;
+const isInt = Number.isInteger(study.metricValue);
+---
+
+<article class:list={['case', `case--${variant}`]} data-reveal>
+  <a class="case__media" href={href} tabindex="-1" aria-hidden="true">
+    <CaseScene scene={study.scene} />
+  </a>
+  <div class="case__body">
+    <p class="case__cat">{study.category}</p>
+    <h3 class="case__title"><a href={href}>{study.title}</a></h3>
+    <p class="case__summary">{study.summary}</p>
+    <div class="case__metric">
+      <span class="case__value">
+        <span data-countup={isInt ? String(study.metricValue) : study.metricValue.toFixed(1)}>
+          {isInt ? study.metricValue : study.metricValue.toFixed(1)}</span
+        >{study.metricSuffix}
+      </span>
+      <span class="case__caption">{study.metricCaption}</span>
+    </div>
+    <a class="case__link" href={href}>Read the story <span aria-hidden="true">→</span></a>
+  </div>
+</article>
+
+<style>
+  .case {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition:
+      transform var(--dur) var(--ease-out-quart),
+      box-shadow var(--dur) ease;
+  }
+  .case:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-lift);
+  }
+  .case--carousel {
+    flex: 0 0 var(--case-w, 480px);
+    max-width: var(--case-w, 480px);
+  }
+  .case--grid {
+    width: 100%;
+  }
+
+  .case__media {
+    display: block;
+    height: 200px;
+    overflow: hidden;
+    background: var(--brand-tint);
+  }
+  .case__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 26px;
+    flex: 1;
+  }
+  .case__cat {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--brand);
+  }
+  .case__title {
+    font-size: 19px;
+    line-height: var(--lh-snug);
+    color: var(--ink);
+  }
+  .case__title a {
+    color: inherit;
+  }
+  .case__title a:hover {
+    color: var(--brand);
+  }
+  .case__summary {
+    font-size: 14.5px;
+    color: var(--body);
+    flex: 1;
+  }
+  .case__metric {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .case__value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--brand);
+    font-variant-numeric: tabular-nums;
+  }
+  .case__caption {
+    font-size: 13.5px;
+    color: var(--body);
+  }
+  .case__link {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-top: 2px;
+  }
+  .case__link span {
+    transition: transform var(--dur) var(--ease-out-quart);
+    display: inline-block;
+  }
+  .case__link:hover span {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .case:hover {
+      transform: none;
+    }
+  }
+</style>

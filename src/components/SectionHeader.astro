@@ -1,0 +1,53 @@
+---
+/**
+ * SectionHeader — H2 + optional lead paragraph.
+ * Deliberately has NO default eyebrow/kicker (avoids the eyebrow-per-section tell).
+ * Emphasis comes from the heading itself; use a <span class="accent"> inside the
+ * title slot for the brand-red accent word.
+ */
+interface Props {
+  align?: 'left' | 'center';
+  id?: string;
+  class?: string;
+}
+
+const { align = 'left', id, class: className = '' } = Astro.props;
+const hasLead = Astro.slots.has('lead');
+---
+
+<header class:list={['section-header', `is-${align}`, className]}>
+  <h2 {id}><slot name="title" /></h2>
+  {hasLead && <p class="lead"><slot name="lead" /></p>}
+</header>
+
+<style>
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    max-width: 60ch;
+  }
+  .section-header.is-center {
+    align-items: center;
+    text-align: center;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  h2 {
+    font-size: var(--step-3);
+    letter-spacing: var(--tracking-display);
+    margin: 0;
+  }
+
+  .lead {
+    font-size: var(--step-1);
+    color: var(--body);
+    max-width: 640px;
+  }
+
+  /* Brand accent word inside the heading. */
+  h2 :global(.accent) {
+    color: var(--brand);
+  }
+</style>

@@ -1,0 +1,287 @@
+---
+import { Image } from 'astro:assets';
+import logoMark from '../assets/logo-mark.png';
+import { site, nav } from '../config';
+import Button from './Button.astro';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+---
+
+<header class="nav" id="site-nav">
+  <div class="container nav__inner">
+    <a href="/" class="nav__brand" aria-label={`${site.name} — home`}>
+      <Image src={logoMark} alt="" width={36} height={36} class="nav__mark" />
+      <span class="nav__word">{site.name}</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      {
+        nav.map((item) => (
+          <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="nav__actions">
+      <a href={site.phoneHref} class="nav__phone">{site.phone}</a>
+      <Button href="/contact" variant="primary" size="md">GET IN TOUCH</Button>
+    </div>
+
+    <button
+      class="nav__toggle"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-drawer"
+      data-drawer-open
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div class="drawer" id="mobile-drawer" data-drawer hidden>
+    <div class="drawer__backdrop" data-drawer-close></div>
+    <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+      <button class="drawer__close" aria-label="Close menu" data-drawer-close>&times;</button>
+      <nav class="drawer__links" aria-label="Mobile">
+        {
+          nav.map((item) => (
+            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+      <div class="drawer__foot">
+        <a href={site.phoneHref} class="drawer__phone">{site.phone}</a>
+        <Button href="/contact" variant="primary" size="lg" class="drawer__cta">GET IN TOUCH</Button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    padding-block: 14px;
+  }
+
+  .nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .nav__brand:hover {
+    color: inherit;
+  }
+  .nav__mark {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+  }
+  .nav__word {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 23px;
+    color: var(--brand);
+    letter-spacing: -0.01em;
+  }
+
+  .nav__links {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+  .nav__links a {
+    color: var(--body);
+  }
+  .nav__links a:hover,
+  .nav__links a[aria-current='page'] {
+    color: var(--brand);
+  }
+
+  .nav__actions {
+    display: flex;
+    gap: 22px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .nav__phone {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .nav__phone:hover {
+    color: var(--brand);
+  }
+
+  /* Hamburger — hidden on desktop */
+  .nav__toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 8px;
+  }
+  .nav__toggle span {
+    width: 24px;
+    height: 2px;
+    background: var(--ink);
+    border-radius: 2px;
+  }
+
+  /* --- Drawer --- */
+  .drawer[hidden] {
+    display: none;
+  }
+  .drawer {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-drawer);
+  }
+  .drawer__backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-drawer-backdrop);
+    background: rgba(20, 12, 15, 0.45);
+    animation: fade var(--dur) var(--ease-out-quart);
+  }
+  .drawer__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-drawer);
+    width: min(86vw, 340px);
+    background: var(--surface);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    box-shadow: -20px 0 50px rgba(20, 12, 15, 0.2);
+    animation: slide-in var(--dur-slow) var(--ease-out-expo);
+  }
+  .drawer__close {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--ink);
+    width: 44px;
+    height: 44px;
+  }
+  .drawer__links {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .drawer__links a {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--ink);
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .drawer__links a:hover,
+  .drawer__links a[aria-current='page'] {
+    color: var(--brand);
+  }
+  .drawer__foot {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  .drawer__phone {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .drawer__cta {
+    width: 100%;
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .drawer__backdrop,
+    .drawer__panel {
+      animation: none;
+    }
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 900px) {
+    .nav__links,
+    .nav__actions {
+      display: none;
+    }
+    .nav__toggle {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const nav = document.getElementById('site-nav');
+  if (nav) {
+    const drawer = nav.querySelector<HTMLElement>('[data-drawer]');
+    const openBtn = nav.querySelector<HTMLElement>('[data-drawer-open]');
+    const closers = nav.querySelectorAll<HTMLElement>('[data-drawer-close]');
+    let lastFocused: HTMLElement | null = null;
+
+    const open = () => {
+      if (!drawer) return;
+      lastFocused = document.activeElement as HTMLElement;
+      drawer.hidden = false;
+      document.body.style.overflow = 'hidden';
+      openBtn?.setAttribute('aria-expanded', 'true');
+      drawer.querySelector<HTMLElement>('.drawer__close')?.focus();
+    };
+    const close = () => {
+      if (!drawer) return;
+      drawer.hidden = true;
+      document.body.style.overflow = '';
+      openBtn?.setAttribute('aria-expanded', 'false');
+      lastFocused?.focus();
+    };
+
+    openBtn?.addEventListener('click', open);
+    closers.forEach((c) => c.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer && !drawer.hidden) close();
+    });
+    // Close after navigating to a hash/link on the same page.
+    drawer?.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+  }
+</script>

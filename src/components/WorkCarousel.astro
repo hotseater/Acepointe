@@ -1,0 +1,193 @@
+---
+import CaseCard from './CaseCard.astro';
+import { caseStudies } from '../data/caseStudies';
+---
+
+<div class="carousel" data-carousel aria-roledescription="carousel" aria-label="Recent work">
+  <div class="carousel__track" data-track tabindex="0">
+    {caseStudies.map((study) => <CaseCard study={study} variant="carousel" />)}
+  </div>
+
+  <div class="carousel__controls">
+    <button class="carousel__arrow" data-prev aria-label="Previous case study">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="carousel__dots" role="tablist" aria-label="Choose case study">
+      {caseStudies.map((study, i) => (
+        <button
+          class="carousel__dot"
+          role="tab"
+          data-dot={i}
+          aria-label={`Show: ${study.title}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+        ></button>
+      ))}
+    </div>
+    <button class="carousel__arrow" data-next aria-label="Next case study">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .carousel {
+    --case-w: min(480px, 84vw);
+  }
+  .carousel__track {
+    display: flex;
+    gap: 26px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 12px 4px 20px;
+    margin: -12px -4px 0;
+    scrollbar-width: none;
+  }
+  .carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+  .carousel__track :global(.case--carousel) {
+    scroll-snap-align: start;
+  }
+  /* Trailing scroll space so the last card can left-align (dots map 1:1). */
+  .carousel__track::after {
+    content: '';
+    flex: 0 0 max(0px, calc(100% - var(--case-w) - 26px));
+  }
+  .carousel__track:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 4px;
+    border-radius: var(--radius-lg);
+  }
+
+  .carousel__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 32px;
+  }
+  .carousel__arrow {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 2px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      border-color var(--dur) ease,
+      color var(--dur) ease,
+      transform var(--dur) var(--ease-out-quart);
+  }
+  .carousel__arrow:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+    transform: translateY(-2px);
+  }
+  .carousel__dots {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .carousel__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-pill);
+    border: none;
+    background: var(--border-strong);
+    padding: 0;
+    transition:
+      width var(--dur) var(--ease-out-quart),
+      background var(--dur) ease;
+  }
+  .carousel__dot[aria-selected='true'] {
+    width: 28px;
+    background: var(--brand);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel__track {
+      scroll-behavior: auto;
+    }
+    .carousel__arrow:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-track]')!;
+    const cards = Array.from(track.children) as HTMLElement[];
+    const dots = Array.from(root.querySelectorAll<HTMLElement>('[data-dot]'));
+    const prev = root.querySelector<HTMLElement>('[data-prev]')!;
+    const next = root.querySelector<HTMLElement>('[data-next]')!;
+    let timer: number | undefined;
+
+    // Deterministic step from real card width + gap — avoids offsetParent quirks.
+    const gap = parseFloat(getComputedStyle(track).columnGap || '26') || 26;
+    const step = () => (cards[0]?.getBoundingClientRect().width ?? 0) + gap;
+    const maxScroll = () => track.scrollWidth - track.clientWidth;
+    const atEnd = () => track.scrollLeft >= maxScroll() - 4;
+    const atStart = () => track.scrollLeft <= 4;
+    // Wider viewports show 2+ cards, so the last cards can't left-align: the
+    // active index is the leftmost card, or the final card once scrolled to end.
+    const indexNow = () => (atEnd() ? cards.length - 1 : Math.round(track.scrollLeft / step()));
+
+    const scrollTo = (left: number) =>
+      track.scrollTo({ left, behavior: prefersReduced ? 'auto' : 'smooth' });
+
+    // Absolute jump (dots): clamp to reachable range.
+    const goTo = (i: number) => {
+      const target = Math.max(0, Math.min(cards.length - 1, i));
+      scrollTo(Math.min(maxScroll(), Math.round(target * step())));
+    };
+    // Directional (arrows/auto): wrap around at the ends.
+    const advance = (dir: number) => {
+      if (dir > 0) scrollTo(atEnd() ? 0 : Math.min(maxScroll(), track.scrollLeft + step()));
+      else scrollTo(atStart() ? maxScroll() : Math.max(0, track.scrollLeft - step()));
+    };
+
+    const setDots = (i: number) => {
+      dots.forEach((d, di) => d.setAttribute('aria-selected', di === i ? 'true' : 'false'));
+    };
+
+    // Keep dots in sync with manual/touch scrolling.
+    let raf = 0;
+    track.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => setDots(indexNow()));
+    });
+
+    const stop = () => {
+      if (timer) { clearInterval(timer); timer = undefined; }
+    };
+    const start = () => {
+      if (prefersReduced || timer) return;
+      timer = window.setInterval(() => advance(1), 5000);
+    };
+
+    prev.addEventListener('click', () => { stop(); advance(-1); });
+    next.addEventListener('click', () => { stop(); advance(1); });
+    dots.forEach((dot, i) => dot.addEventListener('click', () => { stop(); goTo(i); }));
+
+    // Pause on interaction; keyboard arrows on the focused track.
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', start);
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); stop(); advance(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); stop(); advance(-1); }
+    });
+
+    setDots(0);
+
+    start();
+  });
+</script>

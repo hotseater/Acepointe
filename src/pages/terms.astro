@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../config';
+---
+
+<BaseLayout
+  title="Terms"
+  description="The terms that govern your use of the AcePointe website."
+>
+  <PageHero eyebrow="Legal">
+    <Fragment slot="title">Terms of Use</Fragment>
+    <Fragment slot="intro">
+      The terms that govern your use of this website. This is placeholder copy — replace with your
+      reviewed terms before launch.
+    </Fragment>
+  </PageHero>
+
+  <section class="section container prose">
+    <h2>Use of this site</h2>
+    <p>
+      This website and its content are provided for general information about AcePointe's services.
+      Case-study metrics and narratives are illustrative pending client confirmation.
+    </p>
+    <h2>Intellectual property</h2>
+    <p>
+      The content, branding, and design of this site are the property of AcePointe unless otherwise
+      noted. Client logos are used with permission and remain the property of their owners.
+    </p>
+    <h2>Contact</h2>
+    <p>Questions about these terms? Email <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose {
+    max-width: 760px;
+  }
+  .prose h2 {
+    font-size: 1.5rem;
+    margin: 40px 0 12px;
+  }
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+  .prose p {
+    font-size: 16.5px;
+    line-height: 1.8;
+    margin: 0;
+  }
+</style>

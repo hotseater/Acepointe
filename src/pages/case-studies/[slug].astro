@@ -1,0 +1,345 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseScene from '../../components/CaseScene.astro';
+import Button from '../../components/Button.astro';
+import { caseStudies } from '../../data/caseStudies';
+import { site } from '../../config';
+
+export function getStaticPaths() {
+  return caseStudies.map((study, i) => {
+    const next = caseStudies[(i + 1) % caseStudies.length];
+    const prev = caseStudies[(i - 1 + caseStudies.length) % caseStudies.length];
+    return { params: { slug: study.slug }, props: { study, next, prev } };
+  });
+}
+
+const { study, next, prev } = Astro.props;
+---
+
+<BaseLayout title={study.title} description={study.intro}>
+  <article class="case-detail">
+    <!-- Intro -->
+    <header class="case-detail__head container">
+      <a href="/success-stories" class="case-detail__back">&larr; All success stories</a>
+      <p class="eyebrow">{study.category}</p>
+      <h1>{study.title}</h1>
+      <p class="case-detail__intro">{study.intro}</p>
+      <dl class="case-detail__meta">
+        <div><dt>Client</dt><dd>{study.client}</dd></div>
+        <div><dt>Engagement</dt><dd>{study.engagement}</dd></div>
+        <div><dt>Timeline</dt><dd>{study.timeline}</dd></div>
+      </dl>
+    </header>
+
+    <!-- Hero scene -->
+    <div class="case-detail__hero container" data-reveal="scale">
+      <div class="case-detail__hero-frame">
+        <CaseScene scene={study.scene} />
+      </div>
+    </div>
+
+    <!-- Narrative + sidebar -->
+    <div class="case-detail__body container">
+      <div class="case-detail__narrative">
+        <section data-reveal>
+          <h2>The challenge</h2>
+          <p>{study.challenge}</p>
+        </section>
+        <section data-reveal>
+          <h2>What we built</h2>
+          <p>{study.buildIntro}</p>
+          <ul class="case-detail__list">
+            {
+              study.build.map((item) => (
+                <li>
+                  <strong>{item.term}</strong> — {item.detail}
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+        <section data-reveal>
+          <h2>The outcome</h2>
+          <p>{study.outcome}</p>
+        </section>
+      </div>
+
+      <aside class="case-detail__aside">
+        <div class="aside-card" data-reveal>
+          <p class="aside-card__label">Results</p>
+          <ul class="results">
+            {
+              study.results.map((r) => (
+                <li>
+                  <span class="results__value">{r.value}</span>
+                  <span class="results__label">{r.label}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="aside-card" data-reveal>
+          <p class="aside-card__label">Technology</p>
+          <ul class="tech">
+            {study.tech.map((t) => <li>{t}</li>)}
+          </ul>
+        </div>
+        <div class="aside-cta" data-reveal>
+          <p class="aside-cta__title">Have a similar challenge?</p>
+          <p class="aside-cta__copy">
+            Tell us where you are — we'll come back with a point of view within a business day.
+          </p>
+          <Button href="/contact" variant="primary" size="md">GET IN TOUCH</Button>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Prev / next -->
+    <nav class="case-detail__nav container" aria-label="More case studies">
+      <a href={`/case-studies/${prev.slug}`}>
+        <span class="case-detail__nav-label">Previous</span>
+        <span class="case-detail__nav-title">{prev.title}</span>
+      </a>
+      <a href={`/case-studies/${next.slug}`} class="is-next">
+        <span class="case-detail__nav-label">Next</span>
+        <span class="case-detail__nav-title">{next.title} &rarr;</span>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .case-detail__head {
+    max-width: 980px;
+    padding-top: clamp(3rem, 2rem + 4vw, 4.5rem);
+    padding-bottom: 40px;
+  }
+  .case-detail__back {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    display: inline-block;
+    margin-bottom: 28px;
+  }
+  .case-detail__head .eyebrow {
+    margin-bottom: 16px;
+  }
+  .case-detail__head h1 {
+    font-size: clamp(2.25rem, 1.7rem + 2.6vw, 3.25rem);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.12;
+    margin: 0;
+  }
+  .case-detail__intro {
+    font-size: var(--step-1);
+    color: var(--body);
+    max-width: 62ch;
+    margin: 24px 0 0;
+  }
+  .case-detail__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin: 32px 0 0;
+  }
+  .case-detail__meta dt {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .case-detail__meta dd {
+    margin: 0;
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 14.5px;
+  }
+
+  .case-detail__hero {
+    max-width: 1100px;
+  }
+  .case-detail__hero-frame {
+    height: clamp(220px, 32vw, 380px);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+
+  .case-detail__body {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 64px;
+    align-items: start;
+    padding-top: 64px;
+    padding-bottom: 40px;
+  }
+  .case-detail__narrative {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .case-detail__narrative h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 1.9rem);
+    margin: 0 0 16px;
+  }
+  .case-detail__narrative p {
+    font-size: 16.5px;
+    line-height: 1.8;
+  }
+  .case-detail__list {
+    margin: 18px 0 0;
+    padding-left: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 16.5px;
+    line-height: 1.8;
+  }
+  .case-detail__list strong {
+    color: var(--ink);
+  }
+  .case-detail__list li::marker {
+    color: var(--brand);
+  }
+
+  .case-detail__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: sticky;
+    top: 96px;
+  }
+  .aside-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+  }
+  .aside-card__label {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .results__value {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--brand);
+    line-height: 1.1;
+  }
+  .results__label {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--body);
+  }
+  .tech {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tech li {
+    background: var(--brand-tint);
+    color: var(--brand);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+  }
+  .aside-cta {
+    background: var(--dark);
+    color: var(--on-dark);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+  }
+  .aside-cta__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 19px;
+    margin-bottom: 10px;
+  }
+  .aside-cta__copy {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--on-dark-muted);
+    margin-bottom: 20px;
+  }
+
+  .case-detail__nav {
+    max-width: 1100px;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .case-detail__nav a {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--ink);
+    max-width: 46%;
+  }
+  .case-detail__nav .is-next {
+    text-align: right;
+    align-items: flex-end;
+  }
+  .case-detail__nav-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .case-detail__nav-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16.5px;
+    line-height: 1.3;
+  }
+  .case-detail__nav a:hover .case-detail__nav-title {
+    color: var(--brand);
+  }
+
+  @media (max-width: 860px) {
+    .case-detail__body {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .case-detail__aside {
+      position: static;
+    }
+  }
+  @media (max-width: 560px) {
+    .case-detail__meta {
+      gap: 24px;
+    }
+    .case-detail__nav {
+      flex-direction: column;
+    }
+    .case-detail__nav a,
+    .case-detail__nav .is-next {
+      max-width: 100%;
+      text-align: left;
+      align-items: flex-start;
+    }
+  }
+</style>

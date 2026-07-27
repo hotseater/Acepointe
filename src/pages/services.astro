@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { services } from '../data/services';
+---
+
+<BaseLayout
+  title="Services"
+  description="Six practices, one embedded team — AI consulting, forward-deployed engineering, data platforms, analytics, web/app development, and UX, delivered inside your environment."
+>
+  <PageHero eyebrow="Services">
+    <Fragment slot="title">Everything it takes to ship data &amp; AI to <span class="accent">production</span>.</Fragment>
+    <Fragment slot="intro">
+      Six practices, one embedded team. We scope engagements around outcomes — not hours — and every
+      service below is delivered inside your environment, with your engineers in the loop.
+    </Fragment>
+  </PageHero>
+
+  <section class="section container">
+    <div class="services-grid">
+      {services.map((service, i) => <ServiceCard service={service} index={i} />)}
+    </div>
+  </section>
+
+  <CtaBand>
+    <Fragment slot="title">Not sure which of these you need?</Fragment>
+    <Fragment slot="text">
+      That's the conversation. Tell us the outcome you're after and we'll map the shortest path to it.
+    </Fragment>
+  </CtaBand>
+</BaseLayout>
+
+<style>
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+  }
+  @media (max-width: 980px) {
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

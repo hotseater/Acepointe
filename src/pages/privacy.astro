@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../config';
+---
+
+<BaseLayout
+  title="Privacy Policy"
+  description="How AcePointe collects, uses, and protects the information you share with us."
+>
+  <PageHero eyebrow="Legal">
+    <Fragment slot="title">Privacy Policy</Fragment>
+    <Fragment slot="intro">
+      How we handle the information you share with us. This is placeholder copy — replace with your
+      reviewed policy before launch.
+    </Fragment>
+  </PageHero>
+
+  <section class="section container prose">
+    <h2>What we collect</h2>
+    <p>
+      When you contact us through this site, we collect the name, work email, company, and message
+      you submit so we can respond. We do not sell your information.
+    </p>
+    <h2>How we use it</h2>
+    <p>
+      We use your details solely to reply to your inquiry and, if you become a client, to deliver the
+      engagement. We may store submissions in our CRM and email systems.
+    </p>
+    <h2>Contact</h2>
+    <p>Questions about this policy? Email <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose {
+    max-width: 760px;
+  }
+  .prose h2 {
+    font-size: 1.5rem;
+    margin: 40px 0 12px;
+  }
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+  .prose p {
+    font-size: 16.5px;
+    line-height: 1.8;
+    margin: 0;
+  }
+</style>
