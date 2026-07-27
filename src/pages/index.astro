@@ -110,16 +110,6 @@ import { services } from '../data/services';
     padding-top: clamp(3.5rem, 2rem + 6vw, 6rem);
     overflow: hidden;
   }
-  /* subtle dot texture like the OG card */
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 34px 34px;
-    mask-image: linear-gradient(180deg, #000 0%, transparent 78%);
-  }
   .hero .eyebrow {
     color: var(--hero-red);
   }
