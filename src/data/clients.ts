@@ -14,10 +14,10 @@ export interface Client {
 }
 
 export const clients: Client[] = [
-  { name: 'Brightcover Solutions', logo: brightcover, dark: true },
   { name: 'Hookes Consult', logo: hookes },
   { name: 'NookTek', logo: nooktek },
   { name: 'Unif', logo: unif },
   { name: 'Hotseat', logo: hotseat },
   { name: 'iCare Health Services', logo: icare },
+  { name: 'Brightcover Solutions', logo: brightcover, dark: true },
 ];

@@ -71,20 +71,9 @@ import { clients } from '../data/clients';
     max-width: 100%;
     max-height: 52px;
     object-fit: contain;
-    filter: grayscale(1);
-    opacity: 0.6;
-    transition:
-      filter var(--dur) ease,
-      opacity var(--dur) ease;
   }
-  .logos__tile:hover :global(img) {
-    filter: none;
-    opacity: 1;
-  }
-  /* Dark-tile logos (own background) show in full color, a touch larger. */
+  /* Dark-tile logos (own background) render a touch larger with rounded corners. */
   .logos__tile--dark :global(img) {
-    filter: none;
-    opacity: 1;
     max-height: 62px;
     border-radius: 10px;
   }
