@@ -17,6 +17,9 @@ const json = (data: unknown, status = 200) =>
     headers: { 'content-type': 'application/json' },
   });
 
+const esc = (s: string) =>
+  s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
 export const POST: APIRoute = async ({ request }) => {
   let data: Record<string, string>;
   try {
@@ -31,9 +34,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   // --- Bot screening (silently accept bots so they don't learn the rules) ---
-  // Honeypot: a hidden field real users never see or fill.
   if ((data.website || '').trim() !== '') return json({ ok: true });
-  // Time trap: a form completed implausibly fast is automated.
   const renderedAt = Number(data._ts);
   if (renderedAt && Date.now() - renderedAt < 2500) return json({ ok: true });
 
@@ -52,64 +53,31 @@ export const POST: APIRoute = async ({ request }) => {
 
   const lead: Lead = { name, email, company, message };
 
-  // --- Deliver to configured channels (HubSpot CRM + email notification) ---
-  const [hubspot, notify] = await Promise.all([submitToHubSpot(lead), notifyByEmail(lead)]);
-  const outcomes = [hubspot, notify].filter((v): v is boolean => v !== null);
-
-  if (outcomes.length === 0) {
-    // No channel configured yet — don't lose the lead in dev; log it loudly.
-    console.warn('[contact] No delivery channel configured (HUBSPOT_* / RESEND_API_KEY).');
+  // --- Email the lead (Resend) ---
+  const sent = await sendLeadEmail(lead);
+  if (sent === null) {
+    // No email key configured yet — don't lose the lead in dev; log it loudly.
+    console.warn('[contact] RESEND_API_KEY not set — logging lead only.');
     console.info('[contact] lead:', lead);
     return json({ ok: true });
   }
-  if (!outcomes.some((ok) => ok)) {
+  if (!sent) {
     return json(
-      { ok: false, error: 'Something went wrong on our end. Please email info@acepointe.com.' },
+      { ok: false, error: 'Something went wrong sending your message. Please email info@acepointe.com.' },
       502,
     );
   }
   return json({ ok: true });
 };
 
-/** HubSpot Forms API — no token needed, integrates with native form workflows. */
-async function submitToHubSpot(lead: Lead): Promise<boolean | null> {
-  const portalId = import.meta.env.HUBSPOT_PORTAL_ID;
-  const formGuid = import.meta.env.HUBSPOT_FORM_GUID;
-  if (!portalId || !formGuid) return null;
-
-  try {
-    const res = await fetch(
-      `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`,
-      {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          fields: [
-            // Field names must match the HubSpot form's internal field names.
-            { name: 'firstname', value: lead.name },
-            { name: 'email', value: lead.email },
-            { name: 'company', value: lead.company },
-            { name: 'message', value: lead.message },
-          ],
-          context: { pageName: 'AcePointe — Contact' },
-        }),
-      },
-    );
-    if (!res.ok) console.error('[contact] HubSpot submit failed:', res.status, await safeText(res));
-    return res.ok;
-  } catch (err) {
-    console.error('[contact] HubSpot error:', err);
-    return false;
-  }
-}
-
-/** Resend notification to the inbox as a backup/alert channel. */
-async function notifyByEmail(lead: Lead): Promise<boolean | null> {
+/** Send the submission as an email via Resend. Returns null if not configured. */
+async function sendLeadEmail(lead: Lead): Promise<boolean | null> {
   const key = import.meta.env.RESEND_API_KEY;
   if (!key) return null;
 
-  const from = import.meta.env.CONTACT_FROM || 'AcePointe Site <noreply@acepointe.com>';
-  const to = import.meta.env.CONTACT_TO || 'info@acepointe.com';
+  const from = import.meta.env.CONTACT_FROM || 'AcePointe Website <noreply@acepointe.com>';
+  const to = import.meta.env.CONTACT_TO || 'admin@nooktek.com';
+
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -118,8 +86,20 @@ async function notifyByEmail(lead: Lead): Promise<boolean | null> {
         from,
         to,
         reply_to: lead.email,
-        subject: `New inquiry from ${lead.name}${lead.company ? ` (${lead.company})` : ''}`,
-        text: `Name: ${lead.name}\nEmail: ${lead.email}\nCompany: ${lead.company || '—'}\n\n${lead.message}`,
+        subject: `New AcePointe inquiry — ${lead.name}${lead.company ? ` (${lead.company})` : ''}`,
+        text:
+          `Name: ${lead.name}\n` +
+          `Email: ${lead.email}\n` +
+          `Company: ${lead.company || '—'}\n\n` +
+          `${lead.message}\n`,
+        html:
+          `<h2 style="margin:0 0 12px">New AcePointe inquiry</h2>` +
+          `<p style="margin:0 0 12px">` +
+          `<strong>Name:</strong> ${esc(lead.name)}<br>` +
+          `<strong>Email:</strong> <a href="mailto:${esc(lead.email)}">${esc(lead.email)}</a><br>` +
+          `<strong>Company:</strong> ${esc(lead.company) || '—'}` +
+          `</p>` +
+          `<p style="white-space:pre-wrap;margin:0">${esc(lead.message)}</p>`,
       }),
     });
     if (!res.ok) console.error('[contact] Resend failed:', res.status, await safeText(res));

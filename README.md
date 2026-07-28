@@ -23,7 +23,7 @@ npm run build      # outputs to .vercel/output (Vercel adapter)
 - **Astro 7**, TypeScript (strict)
 - **Fonts** self-hosted via the native Astro Fonts API — Bricolage Grotesque (display) + Hanken Grotesk (body)
 - **Imagery** — crafted animated SVG (hero diagram, case-study scenes); no raster placeholders
-- **Contact form** → HubSpot Forms API + Resend notification, with honeypot + time-trap bot screening
+- **Contact form** → emails each submission via Resend to `admin@nooktek.com`, with honeypot + time-trap bot screening
 - **Deploy** — Vercel (`@astrojs/vercel` adapter)
 
 ## Structure
@@ -42,8 +42,9 @@ Copy `.env.example` to `.env` and fill in (all optional — the form logs to the
 
 | Variable | Purpose |
 |---|---|
-| `HUBSPOT_PORTAL_ID`, `HUBSPOT_FORM_GUID` | HubSpot Forms API submission |
-| `RESEND_API_KEY`, `CONTACT_FROM`, `CONTACT_TO` | Email notification |
+| `RESEND_API_KEY` | Resend API key (sends the lead email) |
+| `CONTACT_TO` | Recipient — defaults to `admin@nooktek.com` |
+| `CONTACT_FROM` | From address; its domain must be verified in Resend |
 
 ## Before launch
 
