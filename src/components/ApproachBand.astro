@@ -37,13 +37,14 @@ const steps = [
 
 <style>
   .approach {
-    background: var(--dark);
-    color: var(--on-dark);
+    background: var(--brand-tint);
+    color: var(--ink);
+    border-block: 1px solid var(--border);
     padding-block: clamp(4rem, 3rem + 4vw, 5.6rem);
     margin-block: var(--space-3xl);
   }
   .approach__title {
-    color: var(--on-dark);
+    color: var(--ink);
     font-size: var(--step-3);
     letter-spacing: var(--tracking-display);
     margin-bottom: 3.5rem;
@@ -62,18 +63,18 @@ const steps = [
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 20px;
-    color: var(--brand-light);
+    color: var(--brand);
     margin-bottom: 12px;
   }
   .step__title {
-    color: var(--on-dark);
+    color: var(--ink);
     font-size: 21px;
     margin-bottom: 12px;
   }
   .step__body {
     font-size: 15.5px;
     line-height: 1.75;
-    color: var(--on-dark-muted);
+    color: var(--body);
   }
 
   @media (max-width: 820px) {

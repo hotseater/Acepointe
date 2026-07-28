@@ -195,8 +195,9 @@ const principles = [
   }
 
   .principles {
-    background: var(--dark);
-    color: var(--on-dark);
+    background: var(--brand-tint);
+    color: var(--ink);
+    border-block: 1px solid var(--border);
     padding-block: clamp(3.5rem, 2.5rem + 4vw, 5.6rem);
     margin-top: var(--space-3xl);
   }
@@ -205,11 +206,11 @@ const principles = [
     letter-spacing: 0.18em;
     font-weight: 700;
     text-transform: uppercase;
-    color: var(--brand-light);
+    color: var(--brand);
     margin-bottom: 14px;
   }
   .principles__title {
-    color: var(--on-dark);
+    color: var(--ink);
     font-size: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
     letter-spacing: var(--tracking-display);
     margin: 0 0 48px;
@@ -221,14 +222,14 @@ const principles = [
     gap: 40px 64px;
   }
   .principle h3 {
-    color: var(--on-dark);
+    color: var(--ink);
     font-size: 19px;
     margin: 0 0 8px;
   }
   .principle p {
     font-size: 15px;
     line-height: 1.75;
-    color: var(--on-dark-muted);
+    color: var(--body);
     margin: 0;
   }
 

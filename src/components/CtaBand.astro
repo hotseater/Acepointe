@@ -25,24 +25,10 @@ const { secondaryHref, secondaryLabel } = Astro.props;
 
 <style>
   .cta-band {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    background: var(--dark);
-    color: var(--on-dark);
+    background: var(--brand-tint);
+    color: var(--ink);
+    border-block: 1px solid var(--border);
     margin-top: var(--space-3xl);
-  }
-  /* Soft brand glow so the dark band reads rich, not flat. */
-  .cta-band::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: radial-gradient(
-      ellipse 42% 120% at 88% 40%,
-      color-mix(in srgb, var(--brand) 38%, transparent),
-      transparent 62%
-    );
   }
   .cta-band__inner {
     display: flex;
@@ -52,7 +38,7 @@ const { secondaryHref, secondaryLabel } = Astro.props;
     padding-block: clamp(3rem, 2rem + 4vw, 4.5rem);
   }
   .cta-band__copy h2 {
-    color: var(--on-dark);
+    color: var(--ink);
     font-size: clamp(1.75rem, 1.3rem + 2vw, 2.4rem);
     letter-spacing: var(--tracking-display);
     margin: 0 0 10px;
@@ -60,7 +46,7 @@ const { secondaryHref, secondaryLabel } = Astro.props;
   .cta-band__copy p {
     font-size: 17px;
     line-height: 1.7;
-    color: var(--on-dark-muted);
+    color: var(--body);
     margin: 0;
     max-width: 560px;
   }
@@ -71,19 +57,21 @@ const { secondaryHref, secondaryLabel } = Astro.props;
     align-items: center;
   }
   .cta-band__secondary {
-    color: var(--on-dark);
+    color: var(--ink);
     padding: 15px 30px;
     border-radius: var(--radius-pill);
     font-size: 15px;
     font-weight: 600;
     letter-spacing: 0.04em;
-    border: 2px solid rgba(255, 255, 255, 0.35);
+    border: 2px solid var(--border-strong);
     white-space: nowrap;
-    transition: border-color var(--dur) ease;
+    transition:
+      border-color var(--dur) ease,
+      color var(--dur) ease;
   }
   .cta-band__secondary:hover {
-    border-color: #fff;
-    color: #fff;
+    border-color: var(--brand);
+    color: var(--brand);
   }
 
   @media (max-width: 800px) {
