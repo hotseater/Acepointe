@@ -11,8 +11,8 @@ import { clients } from '../data/clients';
   <ul class="logos__track" data-ltrack>
     {
       clients.map((client) => (
-        <li class="logos__tile">
-          <Image src={client.logo} alt={client.name} height={52} loading="lazy" />
+        <li class:list={['logos__tile', { 'logos__tile--dark': client.dark }]}>
+          <Image src={client.logo} alt={client.name} height={client.dark ? 62 : 52} loading="lazy" />
         </li>
       ))
     }
@@ -80,6 +80,13 @@ import { clients } from '../data/clients';
   .logos__tile:hover :global(img) {
     filter: none;
     opacity: 1;
+  }
+  /* Dark-tile logos (own background) show in full color, a touch larger. */
+  .logos__tile--dark :global(img) {
+    filter: none;
+    opacity: 1;
+    max-height: 62px;
+    border-radius: 10px;
   }
   .logos__arrow {
     width: 40px;
