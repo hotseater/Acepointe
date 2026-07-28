@@ -49,11 +49,6 @@ import { caseStudies } from '../data/caseStudies';
   .carousel__track :global(.case--carousel) {
     scroll-snap-align: start;
   }
-  /* Trailing scroll space so the last card can left-align (dots map 1:1). */
-  .carousel__track::after {
-    content: '';
-    flex: 0 0 max(0px, calc(100% - var(--case-w) - 26px));
-  }
   .carousel__track:focus-visible {
     outline: 2px solid var(--brand);
     outline-offset: 4px;
@@ -123,45 +118,59 @@ import { caseStudies } from '../data/caseStudies';
 
   document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
     const track = root.querySelector<HTMLElement>('[data-track]')!;
-    const cards = Array.from(track.children) as HTMLElement[];
     const dots = Array.from(root.querySelectorAll<HTMLElement>('[data-dot]'));
     const prev = root.querySelector<HTMLElement>('[data-prev]')!;
     const next = root.querySelector<HTMLElement>('[data-next]')!;
+
+    const reals = Array.from(track.children) as HTMLElement[];
+    const realCount = reals.length;
+    if (realCount === 0) return;
+
+    // Clone the set once so the strip can loop forward seamlessly (the clones
+    // sit after the reals; when we glide onto the first clone we instantly hop
+    // back to the real start — visually identical, so the reset is invisible).
+    reals.forEach((c) => {
+      const clone = c.cloneNode(true) as HTMLElement;
+      clone.setAttribute('aria-hidden', 'true');
+      clone.querySelectorAll('a').forEach((a) => a.setAttribute('tabindex', '-1'));
+      // Clones are added AFTER the reveal/scene observers init, so they'd never
+      // be observed — force them to their final visible state.
+      clone.removeAttribute('data-reveal');
+      clone.querySelectorAll('[data-reveal]').forEach((el) => el.removeAttribute('data-reveal'));
+      clone.querySelectorAll<HTMLElement>('.scene').forEach((s) => s.classList.add('play'));
+      track.appendChild(clone);
+    });
+
+    const gap = parseFloat(getComputedStyle(track).columnGap || '26') || 26;
+    const step = () => (reals[0]?.getBoundingClientRect().width ?? 0) + gap;
+    const setWidth = () => realCount * step();
+
+    let i = 0; // logical position across the extended (reals + clones) track
     let timer: number | undefined;
 
-    // Deterministic step from real card width + gap — avoids offsetParent quirks.
-    const gap = parseFloat(getComputedStyle(track).columnGap || '26') || 26;
-    const step = () => (cards[0]?.getBoundingClientRect().width ?? 0) + gap;
-    const maxScroll = () => track.scrollWidth - track.clientWidth;
-    const atEnd = () => track.scrollLeft >= maxScroll() - 4;
-    const atStart = () => track.scrollLeft <= 4;
-    // Wider viewports show 2+ cards, so the last cards can't left-align: the
-    // active index is the leftmost card, or the final card once scrolled to end.
-    const indexNow = () => (atEnd() ? cards.length - 1 : Math.round(track.scrollLeft / step()));
+    const jump = (left: number) => track.scrollTo({ left, behavior: 'auto' });
+    const glide = (left: number) => track.scrollTo({ left, behavior: prefersReduced ? 'auto' : 'smooth' });
 
-    const scrollTo = (left: number) =>
-      track.scrollTo({ left, behavior: prefersReduced ? 'auto' : 'smooth' });
-
-    // Absolute jump (dots): clamp to reachable range.
-    const goTo = (i: number) => {
-      const target = Math.max(0, Math.min(cards.length - 1, i));
-      scrollTo(Math.min(maxScroll(), Math.round(target * step())));
+    const forward = () => {
+      if (i >= realCount) { jump(0); i = 0; } // sitting on the first clone → reset seamlessly
+      i += 1;
+      glide(i * step());
     };
-    // Directional (arrows/auto): wrap around at the ends.
-    const advance = (dir: number) => {
-      if (dir > 0) scrollTo(atEnd() ? 0 : Math.min(maxScroll(), track.scrollLeft + step()));
-      else scrollTo(atStart() ? maxScroll() : Math.max(0, track.scrollLeft - step()));
+    const backward = () => {
+      if (i <= 0) { jump(setWidth()); i = realCount; } // wrap to end seamlessly
+      i -= 1;
+      glide(i * step());
     };
 
-    const setDots = (i: number) => {
-      dots.forEach((d, di) => d.setAttribute('aria-selected', di === i ? 'true' : 'false'));
+    const setDots = () => {
+      const active = ((Math.round(track.scrollLeft / step()) % realCount) + realCount) % realCount;
+      dots.forEach((d, di) => d.setAttribute('aria-selected', di === active ? 'true' : 'false'));
     };
 
-    // Keep dots in sync with manual/touch scrolling.
     let raf = 0;
     track.addEventListener('scroll', () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => setDots(indexNow()));
+      raf = requestAnimationFrame(setDots);
     });
 
     const stop = () => {
@@ -169,12 +178,12 @@ import { caseStudies } from '../data/caseStudies';
     };
     const start = () => {
       if (prefersReduced || timer) return;
-      timer = window.setInterval(() => advance(1), 5000);
+      timer = window.setInterval(forward, 5000);
     };
 
-    prev.addEventListener('click', () => { stop(); advance(-1); });
-    next.addEventListener('click', () => { stop(); advance(1); });
-    dots.forEach((dot, i) => dot.addEventListener('click', () => { stop(); goTo(i); }));
+    prev.addEventListener('click', () => { stop(); backward(); });
+    next.addEventListener('click', () => { stop(); forward(); });
+    dots.forEach((dot, di) => dot.addEventListener('click', () => { stop(); i = di; glide(i * step()); }));
 
     // Pause on interaction; keyboard arrows on the focused track.
     root.addEventListener('mouseenter', stop);
@@ -182,12 +191,11 @@ import { caseStudies } from '../data/caseStudies';
     root.addEventListener('focusin', stop);
     root.addEventListener('focusout', start);
     track.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') { e.preventDefault(); stop(); advance(1); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); stop(); advance(-1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); stop(); forward(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); stop(); backward(); }
     });
 
-    setDots(0);
-
+    setDots();
     start();
   });
 </script>
