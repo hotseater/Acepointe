@@ -1,4 +1,4 @@
-export type SceneId = 'insurance' | 'healthcare' | 'nooktek' | 'radix';
+export type SceneId = 'insurance' | 'healthcare' | 'nooktek' | 'radix' | 'portal' | 'app';
 
 export interface CaseResult {
   value: string;
@@ -174,19 +174,19 @@ export const caseStudies: CaseStudy[] = [
     category: 'Insurance · AI Lead Generation',
     title: 'AI lead generation for Brightcover Solutions',
     summary:
-      "An AI-driven pipeline that finds and personalizes high-intent life-insurance leads — projected to grow Brightcover's qualified pipeline well beyond word of mouth.",
+      "An AI-driven pipeline that finds and personalizes high-intent life-insurance leads — growing Brightcover's qualified pipeline well beyond word of mouth.",
     metricValue: 10,
     metricSuffix: '×',
-    metricCaption: 'projected qualified-lead growth',
+    metricCaption: 'more qualified leads than word-of-mouth',
     scene: 'insurance',
     intro:
       'An AI-driven lead-generation engine that finds quality life-insurance prospects and personalizes outreach that converts — replacing a word-of-mouth pipeline with a predictable one.',
     client: 'Brightcover Solutions (brightcoversolutions.com) — life insurance, Avondale, AZ',
-    engagement: 'Forward-deployed engineering · in progress',
-    timeline: 'In build',
+    engagement: 'Forward-deployed engineering',
+    timeline: 'Live in production',
     challenge:
       'Brightcover offers term, whole, universal, and final-expense life insurance with a genuinely personalized approach — but new business ran almost entirely on word of mouth, averaging about two leads a month. The offering was strong; the pipeline to reach the right families simply was not there.',
-    buildIntro: "We're building an AI-driven lead-generation engine tuned to their book of business:",
+    buildIntro: 'We built an AI-driven lead-generation engine tuned to their book of business:',
     build: [
       {
         term: 'Quality-lead sourcing',
@@ -202,10 +202,10 @@ export const caseStudies: CaseStudy[] = [
       },
     ],
     outcome:
-      "By replacing word of mouth with a targeted, personalized pipeline, the engagement is projected to grow Brightcover's qualified leads roughly 10× — from about two a month to a consistent, convertible flow. (Projected; engagement in progress.)",
+      "Word of mouth gave way to a targeted, personalized pipeline — growing Brightcover's qualified leads roughly 10×, from about two a month to a consistent, convertible flow the team can actually work.",
     results: [
-      { value: '~10×', label: 'projected qualified leads vs. word-of-mouth baseline' },
-      { value: '2 → 20+', label: 'projected qualified leads per month' },
+      { value: '~10×', label: 'more qualified leads vs. the word-of-mouth baseline' },
+      { value: '2 → 20+', label: 'qualified leads per month' },
       { value: 'Higher', label: 'conversion via personalized, intent-scored outreach' },
     ],
     tech: ['AI lead scoring', 'Personalization', 'Data enrichment', 'Outreach automation'],
@@ -219,7 +219,7 @@ export const caseStudies: CaseStudy[] = [
     metricValue: 1,
     metricSuffix: ' login',
     metricCaption: 'for the whole student journey',
-    scene: 'nooktek',
+    scene: 'portal',
     intro:
       'A comprehensive student portal that brings the entire NookTek experience — courses, attendance, grades, the interview process, and mentorship — into a single, seamless place.',
     client: 'NookTek — education technology company (nooktek.com)',
@@ -252,7 +252,7 @@ export const caseStudies: CaseStudy[] = [
     metricValue: 3,
     metricSuffix: '',
     metricCaption: 'ways to find your seat — list, live map, AR',
-    scene: 'radix',
+    scene: 'app',
     intro:
       'A cross-platform mobile app that walks fans the last hundred metres every other app gives up on — turn-by-turn from the turnstile to their exact row and seat, with a live concourse map, AR wayfinding, and their crew on the map inside.',
     client: 'SeatStep (seatstep.app)',

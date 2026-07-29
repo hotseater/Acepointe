@@ -110,6 +110,75 @@ const { scene } = Astro.props;
       </g>
     </svg>
   )}
+
+  {scene === 'portal' && (
+    <svg viewBox="0 0 480 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="480" height="220" fill="var(--brand-tint)" />
+      {/* app window */}
+      <rect x="34" y="24" width="412" height="172" rx="12" fill="#fff" />
+      <rect x="34" y="24" width="412" height="30" rx="12" fill="#f3e7ea" />
+      <circle cx="50" cy="39" r="3.5" fill="#e3b9c0" /><circle cx="62" cy="39" r="3.5" fill="#e3b9c0" /><circle cx="74" cy="39" r="3.5" fill="#e3b9c0" />
+      <rect x="196" y="35" width="120" height="8" rx="4" fill="#e6dfe1" />
+      {/* sidebar nav */}
+      {['Courses', 'Grades', 'Attendance', 'Interview', 'Mentorship'].map((t, i) => (
+        <g transform={`translate(48 ${68 + i * 24})`}>
+          <rect width="104" height="17" rx="5" fill={i === 0 ? 'var(--brand)' : '#f3e7ea'} />
+          <text x="12" y="12.5" class="ui-nav" fill={i === 0 ? '#fff' : 'var(--body)'}>{t}</text>
+        </g>
+      ))}
+      {/* content tiles */}
+      <g transform="translate(170 66)">
+        <rect width="126" height="52" rx="8" fill="#f7eef0" />
+        <text x="14" y="22" class="ui-lbl">COURSE PROGRESS</text>
+        <rect x="14" y="32" width="98" height="7" rx="3.5" fill="#e6dfe1" />
+        <rect x="14" y="32" width="70" height="7" rx="3.5" fill="var(--brand)" />
+      </g>
+      <g transform="translate(306 66)">
+        <rect width="126" height="52" rx="8" fill="#f7eef0" />
+        <text x="14" y="22" class="ui-lbl">GRADES</text>
+        {[22, 32, 26, 38].map((h, i) => (
+          <rect x={16 + i * 24} y={44 - h} width="13" height={h} rx="2" fill="var(--brand)" opacity={0.45 + i * 0.18} />
+        ))}
+      </g>
+      <g transform="translate(170 126)">
+        <rect width="262" height="52" rx="8" fill="#f7eef0" />
+        <text x="14" y="22" class="ui-lbl">ATTENDANCE</text>
+        {Array.from({ length: 16 }).map((_, i) => (
+          <rect x={14 + i * 15} y="30" width="10" height="13" rx="2" fill={i < 13 ? 'var(--brand)' : '#e3b9c0'} />
+        ))}
+      </g>
+    </svg>
+  )}
+
+  {scene === 'app' && (
+    <svg viewBox="0 0 480 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="480" height="220" fill="var(--brand-tint)" />
+      {/* phone */}
+      <g transform="translate(60 16)">
+        <rect width="132" height="188" rx="22" fill="#fff" stroke="#e6dfe1" />
+        <rect x="52" y="10" width="28" height="4" rx="2" fill="#e6dfe1" />
+        <rect x="12" y="22" width="108" height="128" rx="10" fill="#f3e7ea" />
+        <path d="M32 134 L32 92 L66 92 L66 54 L96 54" fill="none" stroke="var(--brand)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="32" cy="134" r="5" fill="#fff" stroke="var(--brand)" stroke-width="2.5" />
+        <circle class="seatpin" cx="96" cy="54" r="6.5" fill="var(--brand)" />
+        <rect x="12" y="158" width="108" height="30" rx="8" fill="var(--brand)" />
+        <text x="24" y="172" class="ui-step">Make a left · §112</text>
+        <text x="24" y="183" class="ui-substep">Row 3 · Seat 12</text>
+      </g>
+      {/* turn-by-turn list */}
+      <g transform="translate(230 40)">
+        <rect width="188" height="140" rx="12" fill="#fff" />
+        <text x="18" y="28" class="ui-lbl">GATE → SEAT</text>
+        {['Enter North Gate', 'Make a left to §112', 'Down the stairs to Row 3', 'Seat 12'].map((t, i) => (
+          <g transform={`translate(18 ${44 + i * 24})`}>
+            {i < 3 && <line x1="5" y1="12" x2="5" y2="20" stroke="var(--brand)" stroke-opacity="0.4" stroke-width="1.5" />}
+            <circle cx="5" cy="7" r="4.5" fill={i === 3 ? 'var(--brand)' : '#fff'} stroke="var(--brand)" stroke-width={i === 3 ? 0 : 1.5} />
+            <text x="20" y="11" class="ui-step2">{t}</text>
+          </g>
+        ))}
+      </g>
+    </svg>
+  )}
 </div>
 
 <style>
@@ -126,8 +195,16 @@ const { scene } = Astro.props;
   .gs { fill: var(--muted); font-family: var(--font-body); font-size: 11px; letter-spacing: 0.08em; }
   .live-t { fill: var(--brand); font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: 0.1em; }
 
+  /* UI mockup text (portal + app scenes) */
+  .ui-nav { font-family: var(--font-body); font-weight: 600; font-size: 9.5px; }
+  .ui-lbl { fill: var(--muted); font-family: var(--font-body); font-weight: 700; font-size: 9px; letter-spacing: 0.07em; }
+  .ui-step { fill: #fff; font-family: var(--font-body); font-weight: 700; font-size: 10px; }
+  .ui-substep { fill: rgba(255, 255, 255, 0.8); font-family: var(--font-body); font-size: 8.5px; }
+  .ui-step2 { fill: var(--ink); font-family: var(--font-body); font-weight: 500; font-size: 9.5px; }
+
   /* idle motion */
   .scene--radix .live { animation: blink 1.8s ease-in-out infinite; transform-origin: center; }
+  .scene--app .seatpin { animation: blink 1.8s ease-in-out infinite; transform-origin: center; }
   @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
 
   /* pre-reveal states (JS only) */
