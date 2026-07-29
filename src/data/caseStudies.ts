@@ -33,198 +33,260 @@ export interface CaseStudy {
   tech: string[];
 }
 
-/** NOTE: metrics + narratives are plausible placeholders — confirm with AcePointe before launch. */
 export const caseStudies: CaseStudy[] = [
   {
-    slug: 'life-insurer',
-    category: 'Insurance · AI Lead Generation',
-    title: 'Smarter lead generation for a national life insurer',
+    slug: 'nooktek-registration',
+    category: 'Education · Forward-Deployed Engineering',
+    title: 'Automating student registration at NookTek',
     summary:
-      'Built an AI-driven lead scoring and routing engine that qualifies prospects in real time and puts agents on the highest-intent conversations first.',
-    metricValue: 3.1,
+      'Two forward-deployed engineers turned a two-hour manual registration into a two-minute automated flow — from application to interview questions to enrollment.',
+    metricValue: 60,
     metricSuffix: '×',
-    metricCaption: 'more qualified leads per agent',
-    scene: 'insurance',
-    intro:
-      'An AI-driven lead scoring and routing engine that qualifies prospects in real time — so agents spend their day on the conversations most likely to become policies.',
-    client: 'National life insurance carrier',
-    engagement: 'Forward-deployed team of 3',
-    timeline: '14 weeks to production',
-    challenge:
-      "The carrier's agents worked purchased lead lists top to bottom. Contact rates were falling, high-intent prospects waited hours for a callback while agents dialed cold numbers, and marketing couldn't say which channels actually produced policyholders — only which produced form fills.",
-    buildIntro:
-      "Our forward-deployed team embedded with the carrier's sales-ops group and shipped in increments from week three:",
-    build: [
-      {
-        term: 'Real-time lead scoring',
-        detail:
-          'a model trained on three years of policy outcomes, scoring every inbound lead on intent and fit within seconds of capture.',
-      },
-      {
-        term: 'Intelligent routing',
-        detail:
-          "hot leads go straight to the best-matched licensed agent's queue; cooler leads enter automated nurture until their signals change.",
-      },
-      {
-        term: 'Channel attribution',
-        detail: 'closed-loop reporting connecting marketing spend to issued policies, not just form fills.',
-      },
-      {
-        term: 'CRM-native delivery',
-        detail: "everything surfaced inside the agents' existing CRM; no new tools to learn.",
-      },
-    ],
-    outcome:
-      "Within a quarter, agents were spending most of their day on scored, routed conversations. The carrier's cost per issued policy dropped by a third, and the scoring model now retrains monthly on fresh outcomes — run entirely by the client's own team, as designed.",
-    results: [
-      { value: '3.1×', label: 'more qualified leads per agent' },
-      { value: '-34%', label: 'cost per issued policy' },
-      { value: '< 5 min', label: 'median response time to hot leads (from 3+ hours)' },
-    ],
-    tech: ['Python', 'AWS', 'Snowflake', 'SageMaker', 'dbt', 'Salesforce'],
-  },
-  {
-    slug: 'healthcare-voice-ai',
-    category: 'Healthcare · Voice AI',
-    title: 'Voice-first incident reporting for a healthcare network',
-    summary:
-      'Replaced form-based incident reporting with a voice AI workflow — clinicians speak, the system captures, structures, and files compliant reports automatically.',
-    metricValue: 82,
-    metricSuffix: '%',
-    metricCaption: 'less time spent on incident reports',
-    scene: 'healthcare',
-    intro:
-      'Clinicians speak; the system captures, structures, and files a compliant incident report — turning a 40-minute form into a 4-minute conversation.',
-    client: 'Regional healthcare network, 6 facilities',
-    engagement: 'Forward-deployed team of 2',
-    timeline: '10 weeks to first live facility',
-    challenge:
-      'Incident reporting is mandatory — and universally dreaded. Nurses faced a 14-screen form at the end of an already long shift, so minor incidents went unreported, serious ones were filed late with thin detail, and the patient-safety team was working from an incomplete picture of what was happening on their floors.',
-    buildIntro: 'A voice-first reporting workflow that meets clinicians where they are — on their feet, between patients:',
-    build: [
-      {
-        term: 'Hands-free capture',
-        detail: 'clinicians describe the incident in their own words from any workstation or shared device.',
-      },
-      {
-        term: 'AI structuring',
-        detail:
-          "speech is transcribed and mapped onto the network's incident taxonomy; the system asks targeted follow-up questions only for missing required fields.",
-      },
-      {
-        term: 'Compliance built in',
-        detail:
-          "reports are generated in the format regulators and insurers require, with an auditable trail; PHI handling reviewed with the client's compliance office from week one.",
-      },
-      {
-        term: 'Safety analytics',
-        detail: 'a dashboard for the patient-safety team surfacing trends by unit, shift, and incident type.',
-      },
-    ],
-    outcome:
-      "Reporting stopped being an end-of-shift chore. Volume went up — not because incidents increased, but because near-misses finally got captured — and the safety team now sees patterns weeks earlier. The network's own IT group runs the system and rolled out facilities four through six without us.",
-    results: [
-      { value: '82%', label: 'less time spent per incident report' },
-      { value: '2.4×', label: 'more incidents & near-misses captured' },
-      { value: '6', label: "facilities live — the last three deployed by the client's own team" },
-    ],
-    tech: ['Azure', 'Speech-to-text', 'LLM structuring', 'FHIR', 'Power BI'],
-  },
-  {
-    slug: 'nooktek',
-    category: 'Education · End-to-End AI',
-    title: 'End-to-end AI implementation at NookTek',
-    summary:
-      "Embedded with NookTek's team to take AI from roadmap to production — learning copilots for students, analytics for educators, and the data platform underneath.",
-    metricValue: 6,
-    metricSuffix: ' wks',
-    metricCaption: 'from kickoff to first AI feature live',
+    metricCaption: 'faster registration (2 hrs → 2 min)',
     scene: 'nooktek',
     intro:
-      "From an AI roadmap on a whiteboard to learning copilots in students' hands — the data platform, the AI features, and the team to run them, delivered as one engagement.",
-    client: 'NookTek — education technology company',
-    engagement: 'Forward-deployed team of 4',
-    timeline: '6 weeks to first live feature · 6 months total',
+      'A two-hour manual registration — application, screening, interview prep, enrollment — rebuilt into a two-minute automated pipeline that runs itself.',
+    client: 'NookTek — education technology company (nooktek.com)',
+    engagement: 'Forward-deployed team of 2',
+    timeline: 'Weeks to production',
     challenge:
-      'NookTek had an ambitious AI roadmap and real competitive pressure — but student data scattered across their LMS, CRM, and product database, no ML infrastructure, and an engineering team fully booked on the core product. Every AI feature was six months away, permanently.',
-    buildIntro: "A four-person AcePointe team embedded with NookTek's engineers and shipped in layers:",
+      'Registering a new student was a two-hour manual slog: staff re-keyed data from the external application form, prepared interview questions by hand, and set each student up across systems. At an average of 20 students per cohort, onboarding ate days of staff time — and the bottleneck capped how fast NookTek could grow.',
+    buildIntro: 'Our engineers embedded with NookTek and automated the pipeline end to end:',
     build: [
       {
-        term: 'Unified data platform',
-        detail:
-          "student activity, outcomes, and content brought into one governed warehouse with privacy controls appropriate for minors' data.",
+        term: 'Application capture',
+        detail: 'pulls each submission straight from the external website form — no re-keying.',
       },
       {
-        term: 'Learning copilot',
-        detail:
-          "an in-product tutor that explains concepts against the student's own coursework, with guardrails reviewed by NookTek's pedagogy team.",
+        term: 'Automated interview questions',
+        detail: 'generates tailored interview questions for each applicant automatically.',
       },
       {
-        term: 'Educator analytics',
-        detail: 'early-warning dashboards flagging students who are struggling weeks before grades show it.',
+        term: 'One-click enrollment',
+        detail: "registers the student across NookTek's systems in a single automated flow.",
       },
       {
-        term: 'In-house capability',
-        detail: 'paired delivery throughout; NookTek engineers co-owned every service from the first commit.',
+        term: 'Two minutes, start to finish',
+        detail: 'the whole journey — application to enrolled — completes in about two minutes.',
       },
     ],
     outcome:
-      "The copilot shipped to a pilot cohort in week six and to all users within the quarter. Session length and course completion both moved. When we rolled off, NookTek's own team shipped the next two AI features without us — which is exactly how we measure success.",
+      'Registration went from two hours to two minutes per student — roughly 60× faster, and about 39 staff-hours reclaimed on every 20-student cohort. Staff moved from data entry to actually supporting students, and enrollment stopped being a growth bottleneck.',
     results: [
-      { value: '6 wks', label: 'from kickoff to first AI feature live' },
-      { value: '+18%', label: 'course completion in the copilot cohort' },
-      { value: '2', label: "AI features shipped by NookTek's own team after handover" },
+      { value: '60×', label: 'faster registration (2 hours → 2 minutes)' },
+      { value: '~39 hrs', label: 'staff time saved per 20-student cohort' },
+      { value: '98%', label: 'less manual admin time' },
     ],
-    tech: ['AWS', 'Snowflake', 'LLM APIs', 'RAG', 'React', 'dbt'],
+    tech: ['Python', 'Workflow automation', 'LLM APIs', 'API integrations'],
   },
   {
-    slug: 'radix-housing-analytics',
-    category: 'Real Estate · Real-Time Data Engineering',
-    title: 'Real-time residential housing analytics for Radix',
+    slug: 'icare-voice-ai',
+    category: 'Healthcare · AI Consulting',
+    title: 'Voice AI documentation for iCare Health Services',
     summary:
-      "Built a production pipeline that streams real-time data from external sources, transforms and stores it, and powers live dashboards embedded on Radix's website.",
-    metricValue: 3,
-    metricSuffix: ' wks',
-    metricCaption: 'to live streaming dashboards in production',
-    scene: 'radix',
+      'Replaced manual clinical documentation across 16 facilities with a conversational voice AI — cutting daily paperwork by 76% and closing compliance gaps.',
+    metricValue: 76,
+    metricSuffix: '%',
+    metricCaption: 'less time on documentation',
+    scene: 'healthcare',
     intro:
-      "A production data-engineering pipeline that streams live data from external sources, transforms and stores it, and powers real-time analytics dashboards embedded directly on Radix's website — built and shipped in three weeks.",
-    client: 'Radix — residential real estate',
-    engagement: 'Forward-deployed data engineering',
-    timeline: '3 weeks to live dashboards in production',
+      'Conversational voice AI that lets staff speak their incident, progress, communication, and intake reports — captured, structured, auto-filled from the system of record, and filed hands-free across 16 facilities.',
+    client: 'iCare Health Services (icarehealth.com) — 16 facilities',
+    engagement: 'AI consulting + forward-deployed build',
+    timeline: 'Live across 16 facilities',
     challenge:
-      'Radix needed to turn a constant flow of external housing-market data into something their team — and their website visitors — could act on immediately. The data lived in disparate external sources, arrived continuously, and had no pipeline to land it anywhere usable. Decisions were being made on stale snapshots, and there was nothing live to show on the company’s own site.',
-    buildIntro:
-      'An AcePointe engineer embedded with Radix and delivered a complete real-time data-engineering implementation:',
+      'Across 16 facilities, staff hand-filled incident reports, progress reports, communication logs, and intake forms — about five hours of documentation a day per facility. Under the load, forms got missed, creating compliance exposure. Manual paperwork was taxing time, effort, and audit-readiness all at once.',
+    buildIntro: 'We built a conversational voice AI documentation system, embedded in their workflow:',
     build: [
       {
-        term: 'Streaming ingestion',
-        detail:
-          'real-time capture of data from multiple external housing-market sources, resilient to source outages and schema drift.',
+        term: 'Conversational capture',
+        detail: 'staff speak the report; the AI captures it and structures it into the right form.',
       },
       {
-        term: 'Transformation & storage',
-        detail:
-          'a pipeline that cleans, transforms, and stores incoming data in a warehouse structured for low-latency analytical queries.',
+        term: 'Source-of-truth integration',
+        detail: 'connected to their system of record to pull and auto-fill known information.',
       },
       {
-        term: 'Real-time dashboards',
-        detail: 'live analytics dashboards surfacing housing metrics as they update, with no manual refresh.',
+        term: 'Voice-ID security',
+        detail: 'each employee is authenticated by voice, so records are secure and attributable.',
       },
       {
-        term: 'Embedded on the website',
-        detail:
-          "the dashboards were published directly onto Radix's website, putting real-time analytics in front of the team and their visitors for immediate decision-making.",
+        term: 'Accessibility by design',
+        detail: 'hands-free operation makes documentation faster and more accessible for every employee.',
       },
     ],
     outcome:
-      'In three weeks Radix went from no pipeline to live, always-current analytics driving decisions and displayed publicly on their site. The team now watches the market move in real time instead of waiting on periodic reports — and the pipeline runs in their own environment.',
+      'Daily documentation dropped from five hours to 1.2 hours per facility — a 76% cut, and roughly 61 staff-hours reclaimed every day across all 16 facilities. Forms stopped slipping through the cracks, so compliance improved right alongside the time savings.',
     results: [
-      { value: '3 wks', label: 'from kickoff to live dashboards in production' },
-      { value: 'Real-time', label: 'streaming analytics, no manual refresh' },
-      { value: 'Live', label: 'dashboards embedded on the company website' },
+      { value: '76%', label: 'less time on documentation (5 → 1.2 hrs/day per facility)' },
+      { value: '~61 hrs', label: 'staff time reclaimed per day across 16 facilities' },
+      { value: '16', label: 'facilities live, with stronger compliance' },
     ],
-    tech: ['Streaming', 'ETL', 'Data warehouse', 'Real-time dashboards', 'Web embed'],
+    tech: ['Conversational voice AI', 'Speech-to-text', 'LLM structuring', 'Voice biometrics', 'System integration'],
+  },
+  {
+    slug: 'unif-analytics',
+    category: 'Public Sector · Real-Time Analytics',
+    title: 'Real-time lab analytics for Unif',
+    summary:
+      'Replaced a four-hour manual pipeline with instant ingestion and streaming — lab results now reach embedded dashboards for government reviewers in under seven seconds.',
+    metricValue: 7,
+    metricSuffix: ' sec',
+    metricCaption: 'lab result to live dashboard (was 4 hrs)',
+    scene: 'radix',
+    intro:
+      "An end-to-end streaming pipeline that ingests lab results the moment they're collected and renders them in embedded, real-time dashboards for external government reviewers — in under seven seconds.",
+    client: 'Unif',
+    engagement: 'Forward-deployed data engineering',
+    timeline: 'Weeks to production',
+    challenge:
+      "Government representatives needed to analyze lab results in Unif's web portal — but getting data there took at least four hours. Results were transcribed by hand from paper forms, an ETL job was kicked off to load reporting tables, and dashboards were refreshed manually. With a minimum of 50 lab results a day, reviewers were always looking at stale data.",
+    buildIntro: 'We built a real-time, end-to-end data pipeline:',
+    build: [
+      {
+        term: 'Instant ingestion',
+        detail: 'captures lab results and pertinent details straight from the collection center — no paper transcription.',
+      },
+      {
+        term: 'Streaming transform',
+        detail: 'cleans and streams the data into reporting tables continuously, replacing the batch ETL.',
+      },
+      {
+        term: 'Embedded real-time dashboards',
+        detail: "live reports embedded in Unif's web portal for external government reviewers — no manual refresh.",
+      },
+      {
+        term: 'Under seven seconds',
+        detail: 'from a result at the collection center to a visible number on the dashboard.',
+      },
+    ],
+    outcome:
+      'The four-hour, manual, error-prone path collapsed to under seven seconds of automated streaming. Reviewers now analyze lab data in real time instead of waiting hours, and the 50+ results a day flow in without a single manual step.',
+    results: [
+      { value: '< 7 sec', label: 'from lab result to live dashboard (was 4+ hours)' },
+      { value: 'Real-time', label: 'streaming, embedded for government reviewers' },
+      { value: '50+/day', label: 'lab results ingested with zero manual entry' },
+    ],
+    tech: ['Streaming ingestion', 'Real-time ETL', 'Data warehouse', 'Embedded dashboards', 'Web portal integration'],
+  },
+  {
+    slug: 'brightcover-lead-generation',
+    category: 'Insurance · AI Lead Generation',
+    title: 'AI lead generation for Brightcover Solutions',
+    summary:
+      "An AI-driven pipeline that finds and personalizes high-intent life-insurance leads — projected to grow Brightcover's qualified pipeline well beyond word of mouth.",
+    metricValue: 10,
+    metricSuffix: '×',
+    metricCaption: 'projected qualified-lead growth',
+    scene: 'insurance',
+    intro:
+      'An AI-driven lead-generation engine that finds quality life-insurance prospects and personalizes outreach that converts — replacing a word-of-mouth pipeline with a predictable one.',
+    client: 'Brightcover Solutions (brightcoversolutions.com) — life insurance, Avondale, AZ',
+    engagement: 'Forward-deployed engineering · in progress',
+    timeline: 'In build',
+    challenge:
+      'Brightcover offers term, whole, universal, and final-expense life insurance with a genuinely personalized approach — but new business ran almost entirely on word of mouth, averaging about two leads a month. The offering was strong; the pipeline to reach the right families simply was not there.',
+    buildIntro: "We're building an AI-driven lead-generation engine tuned to their book of business:",
+    build: [
+      {
+        term: 'Quality-lead sourcing',
+        detail: 'identifies prospects who match the profiles most likely to convert to a policy.',
+      },
+      {
+        term: 'Personalized outreach',
+        detail: "tailors the message to each prospect's situation — the personal touch Brightcover is known for, at scale.",
+      },
+      {
+        term: 'Intent scoring',
+        detail: 'ranks leads by likelihood to convert so the team works the best conversations first.',
+      },
+    ],
+    outcome:
+      "By replacing word of mouth with a targeted, personalized pipeline, the engagement is projected to grow Brightcover's qualified leads roughly 10× — from about two a month to a consistent, convertible flow. (Projected; engagement in progress.)",
+    results: [
+      { value: '~10×', label: 'projected qualified leads vs. word-of-mouth baseline' },
+      { value: '2 → 20+', label: 'projected qualified leads per month' },
+      { value: 'Higher', label: 'conversion via personalized, intent-scored outreach' },
+    ],
+    tech: ['AI lead scoring', 'Personalization', 'Data enrichment', 'Outreach automation'],
+  },
+  {
+    slug: 'nooktek-portal',
+    category: 'Education · Web & App Development',
+    title: 'A student portal for the full NookTek journey',
+    summary:
+      'A comprehensive student portal that unifies the entire NookTek experience — courses, attendance, grades, the interview process, and mentorship — in one seamless place.',
+    metricValue: 1,
+    metricSuffix: ' login',
+    metricCaption: 'for the whole student journey',
+    scene: 'nooktek',
+    intro:
+      'A comprehensive student portal that brings the entire NookTek experience — courses, attendance, grades, the interview process, and mentorship — into a single, seamless place.',
+    client: 'NookTek — education technology company (nooktek.com)',
+    engagement: 'Forward-deployed web development',
+    timeline: 'Weeks to production',
+    challenge:
+      "NookTek's students juggled their courses, grades, attendance, interview process, and mentorship across disconnected tools and touchpoints. The experience was fragmented, and staff spent time stitching it together by hand.",
+    buildIntro: 'We built a comprehensive student portal covering the whole journey:',
+    build: [
+      { term: 'Courses & content', detail: 'students access their coursework and materials in one place.' },
+      { term: 'Attendance & grades', detail: 'live attendance and grades, always up to date.' },
+      { term: 'Interview process', detail: 'the registration and interview journey, tracked end to end.' },
+      { term: 'Mentorship', detail: 'connects students with mentors as part of the same experience.' },
+    ],
+    outcome:
+      'Students now manage their entire experience — from courses to mentorship — in one portal, and NookTek runs it themselves. A fragmented, manual experience became a single seamless one.',
+    results: [
+      { value: '1 login', label: 'for courses, grades, attendance, interviews & mentorship' },
+      { value: 'End-to-end', label: 'the full student journey in one place' },
+      { value: 'Self-run', label: 'owned and operated by NookTek' },
+    ],
+    tech: ['React', 'Node', 'TypeScript', 'Auth', 'PostgreSQL'],
+  },
+  {
+    slug: 'seatstep-app',
+    category: 'Consumer App · Mobile Development',
+    title: 'SeatStep — gate-to-seat navigation app',
+    summary:
+      'A cross-platform mobile app that walks fans the last hundred metres — turn-by-turn from the turnstile to their exact seat, with a live map, AR wayfinding, and their crew on the map inside.',
+    metricValue: 3,
+    metricSuffix: '',
+    metricCaption: 'ways to find your seat — list, live map, AR',
+    scene: 'radix',
+    intro:
+      'A cross-platform mobile app that walks fans the last hundred metres every other app gives up on — turn-by-turn from the turnstile to their exact row and seat, with a live concourse map, AR wayfinding, and their crew on the map inside.',
+    client: 'SeatStep (seatstep.app)',
+    engagement: 'Forward-deployed app development',
+    timeline: 'Launching on iOS & Android',
+    challenge:
+      "Maps get fans to the stadium and quit. Inside — 80,000 people, no signal, kickoff in four minutes — they're stuck between sections reading signs that don't help, and their friends are lost somewhere in the same crowd.",
+    buildIntro: 'We built the SeatStep mobile app for iOS and Android:',
+    build: [
+      {
+        term: 'Gate-to-seat navigation',
+        detail: 'turn-by-turn from the turnstile to the exact row and seat, counting down every step.',
+      },
+      {
+        term: 'Three ways to find it',
+        detail: 'a glanceable step list, a live concourse map that redraws as you walk, and an AR arrow over the real world.',
+      },
+      {
+        term: 'Find your crew',
+        detail: 'puts friends on the venue map inside, so "where are you?!" stops being a shouting match.',
+      },
+      {
+        term: 'Amenities & rewards',
+        detail: 'amenities ranked by your seat, plus vendor vouchers you spend at the stands.',
+      },
+    ],
+    outcome:
+      'SeatStep turns the chaotic last hundred metres into a guided walk — list, map, or AR — and keeps groups together inside the venue. Built cross-platform for iOS and Android, launching soon.',
+    results: [
+      { value: '3', label: 'wayfinding modes: list, live map, AR' },
+      { value: 'iOS + Android', label: 'built cross-platform from one codebase' },
+      { value: 'Gate → seat', label: 'the whole walk, guided end to end' },
+    ],
+    tech: ['React Native', 'Expo', 'AR', 'Real-time location', 'iOS', 'Android'],
   },
 ];
 
