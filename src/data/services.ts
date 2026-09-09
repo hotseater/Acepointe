@@ -4,6 +4,12 @@ export interface Service {
   example: string;
   /** Flagship services get emphasis treatment to break grid monotony. */
   featured?: boolean;
+  /** Spotlight services span the full grid row as a dark panel and link to a dedicated page. */
+  spotlight?: boolean;
+  /** Dedicated landing page for the service. */
+  href?: string;
+  /** Short label for the link to the dedicated page. */
+  linkLabel?: string;
 }
 
 export const services: Service[] = [
@@ -44,5 +50,14 @@ export const services: Service[] = [
     desc: 'Interfaces designed around your users and your brand — because adoption is the real ROI.',
     example:
       "Designed SeatStep's gate-to-seat experience — a turn-by-turn list, a live concourse map, and AR wayfinding for loud, crowded venues.",
+  },
+  {
+    title: 'Data Governance & Microsoft Purview',
+    desc: 'A Microsoft Purview implementation that maps your data estate, classifies and labels what matters, and enforces the policies your auditors and your AI rollout both need.',
+    example:
+      'Data Map and catalog across Fabric, Azure, Microsoft 365, and third-party sources; sensitivity labels and DLP that ship enforced, not in a slide; lineage and stewardship your team runs after we leave.',
+    spotlight: true,
+    href: '/services/purview',
+    linkLabel: 'Explore the Purview implementation',
   },
 ];

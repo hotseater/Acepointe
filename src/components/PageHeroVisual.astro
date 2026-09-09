@@ -4,7 +4,7 @@
  * Matches the homepage hero panel treatment (dark, red glow, framed).
  * Static + light idle motion; the container handles the entrance (load-rise).
  */
-type Variant = 'services' | 'stories' | 'whyus';
+type Variant = 'services' | 'stories' | 'whyus' | 'purview';
 interface Props {
   variant: Variant;
 }
@@ -13,6 +13,7 @@ const labels: Record<Variant, string> = {
   services: 'Six practices, delivered end to end into production',
   stories: 'Real outcomes shipped to production',
   whyus: 'Weeks to production, not quarters',
+  purview: 'Data sources scanned, classified, labeled, and governed in Microsoft Purview',
 };
 ---
 
@@ -113,6 +114,76 @@ const labels: Record<Variant, string> = {
         <line x1="48" y1="330" x2="412" y2="330" stroke="#ffffff" stroke-opacity="0.18" />
       </g>
     )}
+
+    {variant === 'purview' && (
+      <g>
+        <text x="40" y="44" class="lbl">DATA ESTATE</text>
+        <text x="420" y="44" class="lbl" text-anchor="end">GOVERNED</text>
+        {/* sources */}
+        {[
+          { y: 70, t: 'FABRIC' },
+          { y: 126, t: 'AZURE SQL' },
+          { y: 182, t: 'MICROSOFT 365' },
+          { y: 238, t: 'SNOWFLAKE' },
+        ].map((src) => (
+          <g transform={`translate(40 ${src.y})`}>
+            <rect width="118" height="40" rx="9" fill="#ffffff" opacity="0.05" />
+            <rect x="0.5" y="0.5" width="117" height="39" rx="8.5" fill="none" stroke="#ffffff" stroke-opacity="0.1" />
+            <circle cx="18" cy="20" r="4" fill="var(--brand)" />
+            <text x="32" y="24.5" class="tick-sm">{src.t}</text>
+          </g>
+        ))}
+        {/* scan paths: sources -> Purview */}
+        {[90, 146, 202, 258].map((y) => (
+          <path class="scan" d={`M158 ${y} C 176 ${y}, 176 174, 194 174`} stroke="var(--brand)" stroke-width="1.6" stroke-opacity="0.85" fill="none" stroke-dasharray="4 5" />
+        ))}
+        {/* Purview core */}
+        <g transform="translate(194 104)">
+          <rect width="96" height="140" rx="14" fill="url(#phvRed)" />
+          <rect x="1" y="1" width="94" height="138" rx="13" fill="none" stroke="#ffffff" stroke-opacity="0.22" />
+          {/* shield */}
+          <path d="M48 26 l18 7 v14 c0 12 -8 20 -18 24 c-10 -4 -18 -12 -18 -24 v-14 z" fill="#ffffff" opacity="0.16" />
+          <path d="M48 26 l18 7 v14 c0 12 -8 20 -18 24 c-10 -4 -18 -12 -18 -24 v-14 z" fill="none" stroke="#ffffff" stroke-opacity="0.85" stroke-width="1.6" stroke-linejoin="round" />
+          <path d="M40 48 l6 6 l11 -12" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <text x="48" y="96" class="core" text-anchor="middle" fill="#fff">PURVIEW</text>
+          <text x="48" y="112" class="core-sub" text-anchor="middle">DATA MAP</text>
+        </g>
+        {/* policy paths: Purview -> outcomes */}
+        {[90, 146, 202, 258].map((y) => (
+          <path class="scan" d={`M290 174 C 308 174, 308 ${y}, 326 ${y}`} stroke="var(--brand)" stroke-width="1.6" stroke-opacity="0.85" fill="none" stroke-dasharray="4 5" />
+        ))}
+        {/* outcomes */}
+        {[
+          { y: 70, t: 'CATALOGED' },
+          { y: 126, t: 'CLASSIFIED' },
+          { y: 182, t: 'LABELED' },
+          { y: 238, t: 'LINEAGE' },
+        ].map((o) => (
+          <g transform={`translate(326 ${o.y})`}>
+            <rect width="94" height="40" rx="9" fill="#ffffff" opacity="0.05" />
+            <rect x="0.5" y="0.5" width="93" height="39" rx="8.5" fill="none" stroke="var(--brand)" stroke-opacity="0.35" />
+            <text x="12" y="24.5" class="tick-sm">{o.t}</text>
+            <path d="M74 20 l4 4 l7 -8" stroke="var(--brand-light)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+        ))}
+        {/* policy strip */}
+        <g transform="translate(40 306)">
+          <rect width="380" height="54" rx="12" fill="#ffffff" opacity="0.05" />
+          <rect x="0.5" y="0.5" width="379" height="53" rx="11.5" fill="none" stroke="#ffffff" stroke-opacity="0.1" />
+          {[
+            { x: 16, t: 'SENSITIVITY LABELS' },
+            { x: 150, t: 'DLP POLICIES' },
+            { x: 262, t: 'AUDIT-READY' },
+          ].map((c) => (
+            <g transform={`translate(${c.x} 15)`}>
+              <circle cx="7" cy="12" r="6" fill="var(--brand)" opacity="0.9" />
+              <path d="M4.5 12 l2 2 l4 -4.5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+              <text x="20" y="16" class="tick-sm">{c.t}</text>
+            </g>
+          ))}
+        </g>
+      </g>
+    )}
   </svg>
 </div>
 
@@ -180,6 +251,32 @@ const labels: Record<Variant, string> = {
     font-size: 9.5px;
     letter-spacing: 0.08em;
   }
+  .tick-sm {
+    fill: rgba(255, 255, 255, 0.8);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 9.5px;
+    letter-spacing: 0.07em;
+  }
+  .core {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+  }
+  .core-sub {
+    fill: rgba(255, 255, 255, 0.75);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+  }
+  .scan {
+    animation: phv-scan 1.6s linear infinite;
+  }
+  @keyframes phv-scan {
+    to { stroke-dashoffset: -18; }
+  }
   .pulse {
     animation: phv-pulse 2.4s ease-in-out infinite;
     transform-origin: 406px 202px;
@@ -189,6 +286,7 @@ const labels: Record<Variant, string> = {
     50% { opacity: 0.1; transform: scale(1.6); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .pulse { animation: none; }
+    .pulse,
+    .scan { animation: none; }
   }
 </style>

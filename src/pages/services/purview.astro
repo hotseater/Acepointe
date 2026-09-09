@@ -1,0 +1,597 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import PageHeroVisual from '../../components/PageHeroVisual.astro';
+import Button from '../../components/Button.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { site } from '../../config';
+
+const title = 'Microsoft Purview implementation';
+const description =
+  'A forward-deployed Microsoft Purview implementation: Data Map and catalog, classification and sensitivity labels, DLP, lineage, and an operating model your team runs — in weeks, not quarters.';
+
+const capabilities = [
+  {
+    title: 'Data Map & Unified Catalog',
+    body: 'Register every source, organise them into collections, and run scheduled scans so the catalog reflects reality. Business glossary, data products, and owners attached — not a spreadsheet nobody updates.',
+    tags: ['Data Map', 'Unified Catalog', 'Collections', 'Glossary'],
+  },
+  {
+    title: 'Classification & sensitivity labels',
+    body: 'A label taxonomy sized to how your business actually handles data, built-in and custom classifiers tuned against your real records, and auto-labeling that runs at scale across Microsoft 365, Azure, and Fabric.',
+    tags: ['Information Protection', 'Custom SITs', 'Auto-labeling'],
+  },
+  {
+    title: 'Data loss prevention',
+    body: 'DLP policies for email, Teams, SharePoint, OneDrive, endpoints, and cloud apps. Run in simulation first, tuned on real incidents, then enforced — with alerts routed to people who will act on them.',
+    tags: ['DLP', 'Endpoint DLP', 'Policy tips'],
+  },
+  {
+    title: 'Lineage, end to end',
+    body: 'Automated lineage from Data Factory, Synapse, Fabric pipelines, and Power BI, extended with custom lineage where the automation stops. When a number on a dashboard is questioned, you can trace it to its source.',
+    tags: ['Lineage', 'Fabric', 'Power BI', 'Data Factory'],
+  },
+  {
+    title: 'Retention & records',
+    body: 'Retention labels and policies mapped to your legal and regulatory schedule, records management for what must be immutable, and disposition reviews that run on a cadence instead of in a crisis.',
+    tags: ['Data Lifecycle Management', 'Records Management'],
+  },
+  {
+    title: 'AI-ready guardrails',
+    body: 'Before Copilot or your own AI systems touch company data, get the estate ready: oversharing fixed, sensitive content labeled, and Data Security Posture Management reporting on what AI can reach.',
+    tags: ['DSPM for AI', 'Copilot readiness', 'Insider Risk'],
+  },
+];
+
+const phases = [
+  {
+    num: '01',
+    title: 'Assess & embed',
+    when: 'Week 0–1',
+    body: 'Our engineers join your data and security teams on day one. We inventory the estate, confirm licensing and tenant prerequisites, capture the regulatory drivers, and agree a classification taxonomy your business will recognise.',
+    points: [
+      'Data-estate inventory: Microsoft 365, Azure, Fabric, on-prem, and third-party sources',
+      'Licensing and tenant readiness check (E3/E5 add-ons, pay-as-you-go metering)',
+      'First scoped milestone agreed in writing — outcome-based',
+    ],
+  },
+  {
+    num: '02',
+    title: 'Foundation',
+    when: 'Week 1–3',
+    body: 'Stand up the Data Map: collections and role assignments that mirror how you are organised, integration runtimes for on-prem and private sources, and scheduled scans running across the first wave of systems.',
+    points: [
+      'Collections hierarchy and role-based access designed around data ownership',
+      'Sources registered and scanning on a schedule, with scan rule sets tuned',
+      'Data Estate Insights live — the first honest picture of the estate',
+    ],
+  },
+  {
+    num: '03',
+    title: 'Classify & protect',
+    when: 'Week 3–6',
+    body: 'Sensitivity labels published and auto-applied, custom classifiers trained on your real data, DLP policies proven in simulation and then enforced, and lineage flowing from your pipelines into the catalog.',
+    points: [
+      'Label taxonomy, auto-labeling, and custom sensitive information types',
+      'DLP policies: simulation → tuning → enforcement, with alert routing',
+      'Lineage from Fabric, Data Factory, Synapse, and Power BI; glossary and data products populated',
+    ],
+  },
+  {
+    num: '04',
+    title: 'Transfer',
+    when: 'Week 6 onward',
+    body: 'We plan our exit from the first commit. Data stewards trained, runbooks written, a governance operating model in place, and coverage dashboards so leadership can see the estate getting healthier without asking us.',
+    points: [
+      'Steward and admin training, runbooks, and an operating cadence',
+      'Coverage and posture reporting your team owns',
+      'Optional light-touch support after roll-off, on your terms',
+    ],
+  },
+];
+
+const signals = [
+  {
+    title: 'An audit or regulator is asking questions',
+    body: 'SOC 2, HIPAA, GDPR, CCPA, or a customer security review wants evidence of where sensitive data lives and how it is protected — and the honest answer today is "it depends who you ask".',
+  },
+  {
+    title: 'Copilot or an AI rollout is on the roadmap',
+    body: 'Generative AI surfaces everything a user can technically reach. Oversharing that was harmless in a file share becomes a headline once an assistant can summarise it.',
+  },
+  {
+    title: 'You are consolidating on Microsoft Fabric or Azure',
+    body: 'A new platform is the moment to get governance right. Purview is native to Fabric and Azure, and the metadata you capture now compounds as the estate grows.',
+  },
+  {
+    title: 'Purview is licensed but not really deployed',
+    body: 'The tenant has Purview. A few labels exist. Nobody trusts the catalog. You need someone to finish the job and leave your team running it.',
+  },
+];
+
+const scope = [
+  {
+    heading: 'Data governance',
+    items: [
+      'Data Map: sources, collections, scans, integration runtimes',
+      'Unified Catalog: glossary, data products, owners and stewards',
+      'Data Estate Insights and coverage reporting',
+      'Automated and custom lineage',
+      'Sources: Fabric, Azure SQL, ADLS, Synapse, Power BI, SQL Server, Oracle, SAP, Snowflake, Databricks Unity Catalog, Amazon S3',
+    ],
+  },
+  {
+    heading: 'Data security & compliance',
+    items: [
+      'Information Protection: sensitivity labels, auto-labeling, custom classifiers',
+      'Data Loss Prevention across Microsoft 365, endpoints, and cloud apps',
+      'Data Lifecycle Management and Records Management',
+      'Insider Risk Management and Communication Compliance',
+      'Audit, eDiscovery, Compliance Manager, and DSPM for AI',
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: 'Which licences do we need?',
+    a: 'The data-governance side (Data Map, catalog, lineage) is metered pay-as-you-go on an Azure subscription. Information Protection, DLP, and the compliance suite depend on your Microsoft 365 plan — most capabilities need E5, E5 Compliance, or the equivalent add-on. Confirming exactly what your tenant has, and what the gap costs, is the first thing we do in week zero.',
+  },
+  {
+    q: 'We already have a data catalog. Do we replace it?',
+    a: 'Not necessarily. Purview can coexist with an existing catalog, and its main value is often the security and compliance side — labels, DLP, lineage into Fabric and Power BI. We map what you have, decide what stays, and avoid a migration for its own sake.',
+  },
+  {
+    q: 'Can Purview reach on-premises and non-Microsoft systems?',
+    a: 'Yes. Self-hosted integration runtimes scan on-prem SQL Server, Oracle, SAP, and file shares, and there are native connectors for Snowflake, Databricks, Amazon S3, and others. Where a source has no connector, we use the Atlas API to load metadata and lineage.',
+  },
+  {
+    q: 'How long does an implementation take?',
+    a: 'A first production milestone — Data Map scanning, a published label taxonomy, and DLP in simulation — typically lands within the first three weeks. A full classify-and-protect rollout with lineage and stewardship usually runs six to ten weeks, depending on the size of the estate and how much policy tuning your data demands.',
+  },
+];
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Microsoft Purview implementation',
+  serviceType: 'Data governance and compliance implementation',
+  description,
+  url: new URL('/services/purview', site.url).href,
+  provider: {
+    '@type': 'Organization',
+    name: site.name,
+    url: site.url,
+  },
+  areaServed: 'US',
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(serviceSchema)} is:inline />
+
+  <PageHero eyebrow="Microsoft Purview implementation">
+    <Fragment slot="title">Governance that ships, not a <span class="accent">policy binder</span>.</Fragment>
+    <Fragment slot="intro">
+      Our forward-deployed engineers implement Microsoft Purview inside your tenant: the Data Map
+      and catalog, classification and sensitivity labels, DLP, lineage, and the operating model your
+      team runs after we leave. First production milestone in weeks.
+    </Fragment>
+    <Fragment slot="actions">
+      <Button href="/contact" variant="primary" size="lg">BOOK A PURVIEW ASSESSMENT</Button>
+      <Button href="/services" variant="secondary" size="lg">ALL SERVICES</Button>
+    </Fragment>
+    <PageHeroVisual variant="purview" slot="visual" />
+  </PageHero>
+
+  <!-- What we implement -->
+  <section class="section container">
+    <SectionHeader class="head">
+      <Fragment slot="title">What we <span class="accent">implement</span></Fragment>
+      <Fragment slot="lead">
+        Purview is a wide product. We implement the parts that change how your data is found, protected,
+        and trusted — and skip the parts that only look good in a licensing review.
+      </Fragment>
+    </SectionHeader>
+    <div class="caps">
+      {
+        capabilities.map((c, i) => (
+          <article class="cap" data-reveal style={`--reveal-delay:${(i % 3) * 90}ms`}>
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+            <ul class="cap__tags" aria-label="Purview features">
+              {c.tags.map((t) => (
+                <li>{t}</li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- How it runs -->
+  <section class="phases-band">
+    <div class="container">
+      <SectionHeader class="head">
+        <Fragment slot="title">How the implementation <span class="accent">runs</span></Fragment>
+        <Fragment slot="lead">
+          The same Embed, Build &amp; Ship, Transfer model as every AcePointe engagement — applied to a
+          governance rollout that puts working controls in production early and tunes them on real data.
+        </Fragment>
+      </SectionHeader>
+      <ol class="phases">
+        {
+          phases.map((p) => (
+            <li class="phase" data-reveal>
+              <div class="phase__aside">
+                <span class="phase__num">{p.num}</span>
+                <h3 class="phase__title">{p.title}</h3>
+                <span class="phase__when">{p.when}</span>
+              </div>
+              <div class="phase__main">
+                <p>{p.body}</p>
+                <ul>
+                  {p.points.map((pt) => (
+                    <li>{pt}</li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- When to call -->
+  <section class="section container">
+    <SectionHeader class="head">
+      <Fragment slot="title">When to <span class="accent">call us</span></Fragment>
+    </SectionHeader>
+    <div class="signals">
+      {
+        signals.map((s, i) => (
+          <article class="signal" data-reveal style={`--reveal-delay:${(i % 2) * 90}ms`}>
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Scope -->
+  <section class="section container scope-section">
+    <SectionHeader class="head">
+      <Fragment slot="title">What's in <span class="accent">scope</span></Fragment>
+      <Fragment slot="lead">
+        Everything below can be part of an engagement. Most clients start with the Data Map, labels, and
+        DLP, then extend once the estate is visible.
+      </Fragment>
+    </SectionHeader>
+    <div class="scope">
+      {
+        scope.map((col) => (
+          <div class="scope__col" data-reveal>
+            <h3>{col.heading}</h3>
+            <ul>
+              {col.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section container faq-section">
+    <SectionHeader class="head">
+      <Fragment slot="title">Common <span class="accent">questions</span></Fragment>
+    </SectionHeader>
+    <div class="faq">
+      {
+        faqs.map((f) => (
+          <details class="faq__item" data-reveal>
+            <summary>
+              <span>{f.q}</span>
+              <span class="faq__icon" aria-hidden="true" />
+            </summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <CtaBand secondaryHref="/approach" secondaryLabel="HOW WE WORK">
+    <Fragment slot="title">Start with an assessment.</Fragment>
+    <Fragment slot="text">
+      Tell us what is driving the need — an audit, an AI rollout, a platform move — and we'll come
+      back with a scoped plan and the first milestone we'd ship.
+    </Fragment>
+  </CtaBand>
+</BaseLayout>
+
+<style>
+  .head {
+    margin-bottom: 48px;
+  }
+
+  /* --- Capabilities --- */
+  .caps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+  }
+  .cap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px;
+    transition:
+      transform var(--dur) var(--ease-out-quart),
+      box-shadow var(--dur) ease,
+      border-color var(--dur) ease;
+  }
+  .cap:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--brand);
+  }
+  .cap h3 {
+    font-size: 19px;
+  }
+  .cap p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--body);
+  }
+  .cap__tags {
+    list-style: none;
+    margin: auto 0 0;
+    padding: 14px 0 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .cap__tags li {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--brand);
+    background: var(--brand-tint);
+    border: 1px solid color-mix(in srgb, var(--brand) 18%, transparent);
+    border-radius: var(--radius-pill);
+    padding: 4px 10px;
+  }
+
+  /* --- Phases --- */
+  .phases-band {
+    background: var(--brand-tint);
+    border-block: 1px solid var(--border);
+    padding-block: var(--space-3xl);
+  }
+  .phases {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .phase {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(26px, 3vw, 40px);
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 48px;
+  }
+  .phase__num {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--brand);
+  }
+  .phase__title {
+    font-size: 24px;
+    margin-top: 10px;
+  }
+  .phase__when {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .phase__main p {
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+  .phase__main ul {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .phase__main li::marker {
+    color: var(--brand);
+  }
+
+  /* --- Signals --- */
+  .signals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .signal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+  }
+  .signal h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  .signal p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--body);
+  }
+
+  /* --- Scope --- */
+  .scope-section {
+    padding-top: 0;
+  }
+  .scope {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .scope__col {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+  }
+  .scope__col h3 {
+    font-size: 19px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .scope__col ul {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--body);
+  }
+  .scope__col li::marker {
+    color: var(--brand);
+  }
+
+  /* --- FAQ --- */
+  .faq-section {
+    padding-top: 0;
+  }
+  .faq {
+    max-width: 820px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq__item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0 26px;
+    transition: border-color var(--dur) ease;
+  }
+  .faq__item[open] {
+    border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
+  }
+  .faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    list-style: none;
+    cursor: pointer;
+    padding: 20px 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 17.5px;
+    color: var(--ink);
+  }
+  .faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq__item summary:hover {
+    color: var(--brand);
+  }
+  .faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+  }
+  .faq__icon::before,
+  .faq__icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    background: var(--brand);
+    border-radius: 2px;
+    transition: transform var(--dur) var(--ease-out-quart);
+  }
+  .faq__icon::before {
+    width: 14px;
+    height: 2px;
+  }
+  .faq__icon::after {
+    width: 2px;
+    height: 14px;
+  }
+  .faq__item[open] .faq__icon::after {
+    transform: rotate(90deg);
+  }
+  .faq__item p {
+    padding: 0 0 22px;
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: var(--body);
+    max-width: 68ch;
+  }
+
+  @media (max-width: 980px) {
+    .caps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 820px) {
+    .phase {
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+  }
+  @media (max-width: 720px) {
+    .signals,
+    .scope {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .caps {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cap:hover {
+      transform: none;
+    }
+  }
+</style>
