@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /brightcover
 
 Sitemap: https://www.acepointe.com/sitemap-index.xml

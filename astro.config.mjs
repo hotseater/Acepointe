@@ -10,7 +10,14 @@ export default defineConfig({
   // Static pages by default; the contact API opts into on-demand via prerender=false
   // (becomes a Vercel serverless function).
   adapter: vercel(),
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      // /brightcover is a private, password-gated case page for named prospects.
+      // It is noindex on the page itself; keeping it out of the sitemap means a
+      // crawler is never handed the URL in the first place.
+      filter: (page) => !page.includes('/brightcover'),
+    }),
+  ],
 
   // Native Fonts API (Astro 7, stable): fonts are downloaded and self-hosted
   // at build time — no Google CDN calls in production.

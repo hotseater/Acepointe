@@ -1,0 +1,612 @@
+---
+/**
+ * acepointe.com/brightcover — the BrightCover build, for prospects.
+ *
+ * A private case page. Six owner-operated businesses in different trades —
+ * medspa, entertainment, healthcare — are being shown what was built for one
+ * life-insurance agency in three weeks, and asked whether they want the same.
+ *
+ * IT SELLS THE BUILD AND THE SPEED, NOT LEAD NUMBERS. BrightCover's campaign is
+ * two weeks old; there are no lead figures to cite and the SOW guarantees none.
+ * Growth appears once, as what the system is designed for, never as a result a
+ * client achieved. The site's public case study still carries a "10× more
+ * qualified leads" claim from before launch; this page does not repeat it.
+ *
+ * GATED, NOINDEX, OFF THE SITEMAP. The URL is guessable, so a word is required
+ * and stored in an httpOnly cookie. The word comes from BRIGHTCOVER_PAGE_PASSWORD
+ * and the page refuses to render at all if that is unset -- a gate with no key
+ * is an open door, and failing closed is the only safe default for a page that
+ * names a client's numbers and shows their likeness.
+ *
+ * `prerender = false` because reading a cookie is a request-time operation; this
+ * becomes a Vercel function, same as the contact API.
+ *
+ * THE VIDEO SLOT IS EMPTY UNTIL TWO THINGS EXIST: the finished sales film, and
+ * Franca's written agreement to her likeness being used in it. The film shows
+ * her face and cloned voice to sell to other businesses, which is a use beyond
+ * the marketing she approved. Until both are true, VIDEO_URL stays null and the
+ * page leads with the timeline instead.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Button from '../components/Button.astro';
+
+export const prerender = false;
+
+const COOKIE = 'ap_brightcover';
+const PASSWORD = import.meta.env.BRIGHTCOVER_PAGE_PASSWORD;
+
+/** Set when the sales film is rendered AND Franca has agreed to its use. */
+const VIDEO_URL: string | null = null;
+
+let unlocked = false;
+let wrong = false;
+
+if (PASSWORD) {
+  if (Astro.request.method === 'POST') {
+    const form = await Astro.request.formData();
+    const word = String(form.get('word') ?? '').trim();
+    if (word && word === PASSWORD) {
+      Astro.cookies.set(COOKIE, '1', {
+        path: '/brightcover',
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: import.meta.env.PROD,
+        maxAge: 60 * 60 * 24 * 30,
+      });
+      unlocked = true;
+    } else {
+      wrong = true;
+    }
+  } else {
+    unlocked = Astro.cookies.get(COOKIE)?.value === '1';
+  }
+}
+
+const built = [
+  {
+    title: 'A website that does one thing',
+    lead: 'Fifteen pages, one conversion path. Every button leads to a booking or a quote.',
+    items: [
+      'Home, four coverage pages, a location page for every Phoenix-metro city, a nine-article learning section, contact, and booking',
+      'A free guide with an email capture — download on the spot, copy by email',
+      'An intake form that feeds the pipeline directly; no third-party forms, no broken links',
+      'Mobile-first, tap-to-call, WCAG 2.2 AA working standard, Core Web Vitals in the green',
+    ],
+  },
+  {
+    title: 'A lead system that answers before you can',
+    lead: 'Built on GoHighLevel. Every enquiry from every channel lands in one pipeline.',
+    items: [
+      'Pipeline: New → Contacted → Qualified → Quote Sent → Booked → Won / Lost / Nurture',
+      'A business line with call tracking and automatic text-back on every missed call',
+      'Speed-to-lead: a text within sixty seconds of every new lead, then at one hour, day one, day three, day seven, then monthly',
+      'Self-service booking with confirmation, 24-hour and 1-hour reminders, and no-show recovery',
+      'Comment the keyword on any post and the system replies, sends the guide, and hands over a booking link — while the owner is with a client',
+      'TCPA-compliant throughout: quiet hours, STOP/HELP, A2P-registered',
+    ],
+  },
+  {
+    title: 'Fourteen films. Zero filming.',
+    lead: 'The owner never stood in front of a camera. Two weeks of professional video from one photograph and a two-minute voice sample.',
+    items: [
+      'Her likeness generated from one photo; her voice cloned from a short sample; every word from a script she approved',
+      'Seven outfits and seven rooms across the fortnight — a business-owner film does not look like a family film',
+      'Captions burned in on every line, an authored headline per scene, and an end card with the ask — most people watch muted',
+      'Each film cut for its platform: one for Facebook and Instagram, one with captions placed clear of YouTube Shorts’ chrome, a poster for Google Business Profile',
+      'Scheduled to Facebook, Instagram, YouTube and Google automatically — as Reels, as Stories, as Shorts, as posts',
+      'A private review page so she signs off on every film before it publishes',
+    ],
+  },
+  {
+    title: 'Found by Google. Cited by ChatGPT.',
+    lead: 'SEO for search engines. AEO and GEO for the answer engines people are switching to.',
+    items: [
+      'Structured data on the agency, every service, the FAQ, opening hours and service area — so search engines read the business, not just the page',
+      'Answer-first content: every article opens with a passage an AI assistant can quote whole',
+      'An llms.txt that tells ChatGPT, Claude and Copilot exactly what the business is and does',
+      'Titles, descriptions and share previews fixed on every page; sitemap and search-engine registration on Google and Bing',
+      'Independent audit health score of 77, with every remaining item logged and prioritised',
+      'Analytics and conversion tracking on forms, bookings and calls',
+    ],
+  },
+  {
+    title: 'Every platform, set up and matching',
+    lead: 'The same name, address, hours and service area everywhere a customer might look.',
+    items: [
+      'Facebook Business Page, Instagram business account, YouTube channel, LinkedIn company page — branded, connected, publishing on schedule',
+      'Google Business Profile: fifteen-city service area, categories, hours, photos, weekly posts, a review-request flow',
+      'Bing Places, synced with the Google profile — it is what ChatGPT and Copilot use to find local businesses',
+      'Yelp for Business, live and verified',
+      'Better Business Bureau profile',
+      'Company email on the business domain through Microsoft 365, connected to the platform',
+    ],
+  },
+  {
+    title: 'Compliance built in, not bolted on',
+    lead: 'Insurance is regulated advertising. The system is built so the licensed agent approves everything, and nothing can quote a price.',
+    items: [
+      'Every post, film and message cleared by the licensed agent before it publishes',
+      'No premium figures, no guarantees, no carrier names — enforced by automated tests on the website’s own content',
+      'Automated DM replies that recognise a price or health question and hand it to a human',
+      'Every generated film disclosed as AI-generated at upload, on every platform',
+    ],
+  },
+];
+
+const numbers = [
+  { value: '3', label: 'weeks from signed SOW to live' },
+  { value: '15', label: 'pages on the new site' },
+  { value: '14', label: 'films in the first fortnight' },
+  { value: '7', label: 'platforms publishing on schedule' },
+  { value: '77', label: 'SEO health score, independently audited' },
+];
+
+const timeline = [
+  { when: '6 Aug', what: 'Statement of work signed' },
+  { when: '10 Aug', what: 'Build starts — platform, website and social in parallel' },
+  { when: '28 Aug', what: 'Lead system live' },
+  { when: '31 Aug', what: 'Website live, search engines registered' },
+  { when: '1 Sep', what: 'First film publishes. Five a week since.' },
+];
+---
+
+<BaseLayout
+  title="What we built for BrightCover"
+  description="A private look at a three-week build: website, lead system, fourteen AI-generated films, SEO and AEO, seven platforms — for a one-person business."
+>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+  </Fragment>
+
+  {
+    !PASSWORD ? (
+      <section class="gate container">
+        <div class="gate__card">
+          <p class="eyebrow">Private page</p>
+          <h1>This page is not configured.</h1>
+          <p class="gate__lead">
+            <code>BRIGHTCOVER_PAGE_PASSWORD</code> is not set, so the page refuses to open. Set it in
+            Vercel and redeploy.
+          </p>
+        </div>
+      </section>
+    ) : !unlocked ? (
+      <section class="gate container">
+        <form class="gate__card" method="post" action="/brightcover" autocomplete="off">
+          <p class="eyebrow">Private page</p>
+          <h1>Enter the word to open this page.</h1>
+          <p class="gate__lead">You were sent it with the link. It is one word.</p>
+          <label for="word" class="gate__label">The word</label>
+          <input
+            id="word"
+            name="word"
+            type="password"
+            class="gate__input"
+            autocomplete="off"
+            autofocus
+            required
+            aria-invalid={wrong ? 'true' : undefined}
+            aria-describedby={wrong ? 'gate-error' : undefined}
+          />
+          {wrong && (
+            <p id="gate-error" class="gate__error" role="alert">
+              That is not it. Check the message the link came in.
+            </p>
+          )}
+          <Button type="submit" variant="primary" size="lg">OPEN</Button>
+        </form>
+      </section>
+    ) : (
+      <>
+        <PageHero eyebrow="Private case study · BrightCover Solutions">
+          <Fragment slot="title">
+            Three weeks. One person’s business. <span class="accent">Everything.</span>
+          </Fragment>
+          <Fragment slot="intro">
+            A one-person life insurance agency in Arizona ran on word of mouth. In three weeks it had a
+            new website, a lead system that answers in sixty seconds, fourteen professional films of the
+            owner — who never filmed a thing — and a presence on seven platforms, publishing itself. This
+            is what was built, how, and what the same build looks like for a business like yours.
+          </Fragment>
+          <Fragment slot="actions">
+            <Button href="/contact" variant="primary" size="lg">BOOK TWENTY MINUTES</Button>
+            <Button href="#built" variant="secondary" size="lg">SEE WHAT WAS BUILT</Button>
+          </Fragment>
+        </PageHero>
+
+        {VIDEO_URL && (
+          <section class="film container">
+            <div class="film__frame">
+              <video controls playsinline preload="metadata" src={VIDEO_URL} />
+            </div>
+            <p class="film__caption">
+              Two and a half minutes. The first eight seconds are the client’s own film.
+            </p>
+          </section>
+        )}
+
+        <section class="numbers container" aria-label="The build in numbers">
+          {numbers.map((n) => (
+            <div class="numbers__item">
+              <span class="numbers__value">{n.value}</span>
+              <span class="numbers__label">{n.label}</span>
+            </div>
+          ))}
+        </section>
+
+        <section class="section container">
+          <SectionHeader>
+            <Fragment slot="title">From a signed SOW to <span class="accent">live</span> in three weeks.</Fragment>
+            <Fragment slot="lead">
+              Platform, website and social were built in parallel, not in sequence. The only thing that
+              waited on a third party was carrier approval for business texting — and everything else
+              shipped around it.
+            </Fragment>
+          </SectionHeader>
+          <ol class="timeline">
+            {timeline.map((t) => (
+              <li class="timeline__item">
+                <span class="timeline__when">{t.when}</span>
+                <span class="timeline__what">{t.what}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section id="built" class="section section--tint">
+          <div class="container">
+            <SectionHeader>
+              <Fragment slot="title">What was <span class="accent">built</span>.</Fragment>
+              <Fragment slot="lead">
+                Six pieces. None of them a template — each was built for this business, in its own
+                environment, and handed over with the capability to run it.
+              </Fragment>
+            </SectionHeader>
+            <div class="built">
+              {built.map((b) => (
+                <article class="built__item">
+                  <h3>{b.title}</h3>
+                  <p class="built__lead">{b.lead}</p>
+                  <ul class="built__list">
+                    {b.items.map((it) => (
+                      <li>{it}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section class="section container">
+          <SectionHeader>
+            <Fragment slot="title">Built to <span class="accent">scale</span>, not to run once.</Fragment>
+            <Fragment slot="lead">
+              Nothing above needs a person to keep it going. The films schedule themselves, the leads
+              answer themselves, the follow-up runs on its own clock. That is what lets a one-person
+              business behave like one with a marketing department.
+            </Fragment>
+          </SectionHeader>
+          <div class="scale">
+            <p>
+              The system is designed to take a practice from a handful of enquiries a month to many
+              times that — <strong>two to twenty times over three to six months</strong> — without adding
+              a single person to run it. That is capacity, not a promise: every business starts from a
+              different place, and no one can guarantee what a market will do. What can be guaranteed is
+              that when the enquiries come, every one of them is answered in sixty seconds, followed up
+              on schedule, and offered a booking. The ceiling is the market. The floor is no longer the
+              owner’s calendar.
+            </p>
+          </div>
+        </section>
+
+        <section class="section section--tint">
+          <div class="container">
+            <SectionHeader>
+              <Fragment slot="title">The same build, for a <span class="accent">different</span> trade.</Fragment>
+              <Fragment slot="lead">
+                Nothing here is specific to insurance except the compliance rules — and every regulated
+                trade has its own, which is exactly why they are built in rather than bolted on.
+              </Fragment>
+            </SectionHeader>
+            <div class="trades">
+              <div class="trades__item">
+                <h3>A medspa</h3>
+                <p>
+                  Treatment pages that rank, before-and-after content the owner approves, a booking
+                  calendar that fills the quiet afternoons, and the follow-up that turns one visit into a
+                  course.
+                </p>
+              </div>
+              <div class="trades__item">
+                <h3>A clinic or practice</h3>
+                <p>
+                  Answer-first pages for the questions patients actually search, a Business Profile that
+                  shows up for “near me”, intake that lands in one place, and reminders that cut no-shows.
+                </p>
+              </div>
+              <div class="trades__item">
+                <h3>A studio, venue or agency</h3>
+                <p>
+                  Short-form video every week without a shoot day, a pipeline that captures every enquiry
+                  from every platform, and booking that works while the owner is on a job.
+                </p>
+              </div>
+            </div>
+            <p class="trades__note">
+              Web and mobile, with the automation underneath. Fixed-price build, monthly management,
+              and you own everything after — code, platform, content, and the ability to run it.
+            </p>
+          </div>
+        </section>
+
+        <CtaBand secondaryHref="/success-stories" secondaryLabel="OTHER WORK">
+          <Fragment slot="title">Want to see what this looks like for your business?</Fragment>
+          <Fragment slot="text">
+            Twenty minutes. We will walk through your site, your pipeline and your content as they are
+            today, and show you exactly what the build would change — before anything is scoped or
+            priced.
+          </Fragment>
+        </CtaBand>
+      </>
+    )
+  }
+</BaseLayout>
+
+<style>
+  /* ---- the gate --------------------------------------------------------- */
+  .gate {
+    display: grid;
+    place-items: center;
+    min-height: 70vh;
+    padding-block: var(--space-xl);
+  }
+  .gate__card {
+    width: min(100%, 30rem);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+    box-shadow: var(--shadow-form);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  .gate__card h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 1.9rem);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-display);
+    color: var(--ink);
+    text-wrap: balance;
+    margin: 0;
+  }
+  .gate__lead {
+    color: var(--body);
+    margin: 0;
+  }
+  .gate__lead code {
+    font-size: 0.9em;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.1em 0.4em;
+  }
+  .gate__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: var(--space-xs);
+  }
+  .gate__input {
+    font: inherit;
+    font-size: 1.1rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-input);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .gate__input:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-color: var(--brand);
+  }
+  .gate__input[aria-invalid='true'] {
+    border-color: var(--brand);
+  }
+  .gate__error {
+    color: var(--brand-deep);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  /* ---- the film ----------------------------------------------------------- */
+  .film {
+    padding-block: 0 var(--space-xl);
+  }
+  .film__frame {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--dark);
+    box-shadow: var(--shadow-card);
+    aspect-ratio: 16 / 9;
+  }
+  .film__frame video {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .film__caption {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: var(--space-xs) 0 0;
+  }
+
+  /* ---- numbers ------------------------------------------------------------ */
+  .numbers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: var(--space-md);
+    padding-block: var(--space-lg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .numbers__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .numbers__value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    line-height: 1;
+    letter-spacing: var(--tracking-display);
+    color: var(--brand);
+    font-variant-numeric: tabular-nums;
+  }
+  .numbers__label {
+    color: var(--body);
+    font-size: 0.95rem;
+    line-height: var(--lh-snug);
+  }
+
+  /* ---- timeline ----------------------------------------------------------- */
+  .timeline {
+    list-style: none;
+    margin: var(--space-lg) 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+    max-width: 44rem;
+  }
+  .timeline__item {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: var(--space-md);
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--border);
+    align-items: baseline;
+  }
+  .timeline__item:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+  .timeline__when {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--brand);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .timeline__what {
+    color: var(--ink);
+  }
+
+  /* ---- what was built ------------------------------------------------------ */
+  .section--tint {
+    background: var(--brand-tint);
+    padding-block: var(--space-xl);
+  }
+  .built {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+  .built__item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.4rem, 3vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+  .built__item h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-display);
+    color: var(--ink);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .built__lead {
+    color: var(--body);
+    margin: 0;
+  }
+  .built__list {
+    margin: var(--space-xs) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    color: var(--body);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .built__list li {
+    display: grid;
+    grid-template-columns: 0.9rem 1fr;
+    gap: 0.7rem;
+  }
+  .built__list li::before {
+    content: '';
+    height: 1px;
+    background: var(--brand);
+    margin-top: 0.75em;
+  }
+
+  /* ---- scale + trades ------------------------------------------------------ */
+  .scale {
+    max-width: 44rem;
+    margin-top: var(--space-lg);
+    color: var(--body);
+    font-size: 1.05rem;
+    line-height: var(--lh-body);
+  }
+  .scale p {
+    margin: 0;
+  }
+  .scale strong {
+    color: var(--ink);
+  }
+  .trades {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+  .trades__item h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    letter-spacing: var(--tracking-display);
+    color: var(--ink);
+    margin: 0 0 0.5rem;
+  }
+  .trades__item p {
+    color: var(--body);
+    margin: 0;
+    line-height: 1.6;
+  }
+  .trades__note {
+    max-width: 44rem;
+    margin: var(--space-lg) 0 0;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gate__input,
+    .built__item {
+      transition: none;
+    }
+  }
+</style>
