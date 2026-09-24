@@ -7,7 +7,13 @@ actually signs.
 | file | page | film |
 |---|---|---|
 | `acepointe-forward-deployed.mp4` | `/forward-deployed` | Film B — "We embed, and we build" |
+| `acepointe-forward-deployed.vtt` | | its captions |
 | `acepointe-the-system.mp4` | `/brightcover` | Film A — "The system that runs your marketing" |
+
+Captions are a sidecar track, not burnt in: the frames already carry designed
+type, and a second stream of words fighting it would ruin both. They are
+generated from the narration's own word timings, so a caption cannot drift out
+of sync with the reveal it sits under.
 
 **These files are public.** A static file on Vercel cannot sit behind the page's
 cookie without routing it through a function, and it does not need to: the films

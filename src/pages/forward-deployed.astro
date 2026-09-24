@@ -46,8 +46,21 @@ const PASSWORD = import.meta.env.FORWARD_DEPLOYED_PAGE_PASSWORD;
  * The filename is what a prospect ends up with in their downloads folder, which
  * is why it says what it is rather than being a hash.
  */
-const FILM: string | null = null;
-const FILM_RUNTIME = '2 minutes 25 seconds';
+const FILM: string | null = '/film/acepointe-forward-deployed.mp4';
+const FILM_RUNTIME = '2 minutes 27 seconds';
+
+/**
+ * The caption track, generated from the narration's own word timings.
+ *
+ * WORTH HAVING EVEN THOUGH THE FILM IS COVERED IN TYPE. The on-screen type is
+ * the argument, not a transcript — it carries maybe a fifth of what is said.
+ * And this arrives as a link in an email, which on most clients means the first
+ * few seconds play muted while somebody decides whether to care.
+ *
+ * A sidecar rather than burnt in, because the frames already carry designed
+ * type and a second stream of words fighting it would ruin both.
+ */
+const CAPTIONS: string | null = '/film/acepointe-forward-deployed.vtt';
 
 let unlocked = false;
 let wrong = false;
@@ -188,7 +201,11 @@ const owned = [
         {FILM ? (
           <section id="film" class="film container">
             <div class="film__frame">
-              <video controls playsinline preload="metadata" src={FILM} />
+              <video controls playsinline preload="metadata" src={FILM}>
+                {CAPTIONS && (
+                  <track kind="captions" src={CAPTIONS} srclang="en" label="English" default />
+                )}
+              </video>
             </div>
             <p class="film__caption">
               {FILM_RUNTIME}.{' '}
