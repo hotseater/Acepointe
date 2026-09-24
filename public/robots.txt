@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /brightcover
+Disallow: /forward-deployed
+Disallow: /film/
 
 Sitemap: https://www.acepointe.com/sitemap-index.xml

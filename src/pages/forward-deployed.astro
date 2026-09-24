@@ -1,0 +1,485 @@
+---
+/**
+ * acepointe.com/forward-deployed — the second sales film, for prospects.
+ *
+ * WHY THIS IS NOT ON /brightcover. That page is the BrightCover case: a
+ * three-week marketing build for a one-person agency, and the film that belongs
+ * on it is Film A. This film — "We embed, and we build" — never mentions
+ * BrightCover. It is about the forward-deployed model and the software
+ * practice, and it goes to prospects whose problem is a process that eats their
+ * week rather than a marketing funnel. Two audiences, two pages.
+ *
+ * GATED, NOINDEX, OFF THE SITEMAP, same as /brightcover. The word comes from
+ * FORWARD_DEPLOYED_PAGE_PASSWORD and the page refuses to render without it: a
+ * gate with no key is an open door.
+ *
+ * THE FILM FILE IS DELIBERATELY NOT GATED, and that is the point of it. The ask
+ * was for two links — a page to send, and the file itself, so it can be
+ * forwarded, attached or dropped into a deck. A static file on Vercel cannot be
+ * put behind a cookie without routing it through a function, and it does not
+ * need to be: the film contains nothing that is not already published on this
+ * site. The page is private so that a prospect gets it as something addressed
+ * to them; the file is unlisted rather than secret. robots.txt keeps both out of
+ * search results, which is what actually matters here — Google indexes mp4s.
+ *
+ * `prerender = false` because reading a cookie is a request-time operation.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Button from '../components/Button.astro';
+
+export const prerender = false;
+
+const COOKIE = 'ap_forward_deployed';
+const PASSWORD = import.meta.env.FORWARD_DEPLOYED_PAGE_PASSWORD;
+
+/**
+ * The film, once it is rendered with narration and placed in public/film/.
+ *
+ * Set this to '/film/acepointe-forward-deployed.mp4' when the file is there.
+ * It stays null until then, because a <video> pointing at a 404 renders as a
+ * black rectangle with a dead control bar — worse than no player at all on a
+ * page a prospect was sent personally.
+ *
+ * The filename is what a prospect ends up with in their downloads folder, which
+ * is why it says what it is rather than being a hash.
+ */
+const FILM: string | null = null;
+const FILM_RUNTIME = '2 minutes 25 seconds';
+
+let unlocked = false;
+let wrong = false;
+
+if (PASSWORD) {
+  if (Astro.request.method === 'POST') {
+    const form = await Astro.request.formData();
+    const word = String(form.get('word') ?? '').trim();
+    if (word && word === PASSWORD) {
+      Astro.cookies.set(COOKIE, '1', {
+        path: '/forward-deployed',
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: import.meta.env.PROD,
+        maxAge: 60 * 60 * 24 * 30,
+      });
+      unlocked = true;
+    } else {
+      wrong = true;
+    }
+  } else {
+    unlocked = Astro.cookies.get(COOKIE)?.value === '1';
+  }
+}
+
+const means = [
+  {
+    title: 'Our engineers work inside your business',
+    body: 'Not a discovery phase and a document. They sit in the process, in your systems, and learn how it actually runs — including the parts nobody wrote down, which are usually the parts that cost you the week.',
+  },
+  {
+    title: 'The people who scope it are the people who build it',
+    body: 'No pitch team, no handoff to a delivery team who were not in the room, no bench. What gets promised is promised by the person who has to make it true.',
+  },
+  {
+    title: 'Working software in weeks, not quarters',
+    body: 'Something running, in your hands, early enough to change your mind about it. The alternative — a long build against a spec written before anyone understood the problem — is how projects come in late and wrong at the same time.',
+  },
+  {
+    title: 'Sized for small and mid-size businesses',
+    body: 'The embedded model normally costs what a Fortune 500 pays for it. We built ours for the businesses where the work actually gets done.',
+  },
+];
+
+/**
+ * The NookTek figures, exactly as this site already publishes them on
+ * /case-studies/nooktek-registration. The cohort size is load-bearing — 39
+ * hours only follows from twenty students — so it travels with the number.
+ */
+const proof = [
+  { value: '2 hrs → 2 min', label: 'per student, application to enrolled' },
+  { value: '60×', label: 'faster student registration' },
+  { value: '~39', label: 'staff-hours reclaimed on every 20-student cohort' },
+];
+
+const software = [
+  'Native iOS and Android, built for production rather than for a demo',
+  'Turn-by-turn wayfinding from the turnstile to the seat — gate, concourse, section, row',
+  'A live concourse map with every amenity surveyed on foot, not guessed',
+  'AR wayfinding for venues too loud and too crowded to think in',
+  'And the rest of it: web, data pipelines, dashboards, and AI that does a real job',
+];
+
+const owned = [
+  'The code',
+  'The platform',
+  'The documentation',
+  'The ability to run it without us',
+];
+---
+
+<BaseLayout
+  title="We embed, and we build"
+  description="A private look at how forward-deployed engineering works, what it did for a training company, and the software practice behind it."
+>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+  </Fragment>
+
+  {
+    !PASSWORD ? (
+      <section class="gate container">
+        <div class="gate__card">
+          <p class="eyebrow">Private page</p>
+          <h1>This page is not configured.</h1>
+          <p class="gate__lead">
+            <code>FORWARD_DEPLOYED_PAGE_PASSWORD</code> is not set, so the page refuses to open. Set
+            it in Vercel and redeploy.
+          </p>
+        </div>
+      </section>
+    ) : !unlocked ? (
+      <section class="gate container">
+        <form class="gate__card" method="post" action="/forward-deployed" autocomplete="off">
+          <p class="eyebrow">Private page</p>
+          <h1>Enter the word to open this page.</h1>
+          <p class="gate__lead">You were sent it with the link. It is one word.</p>
+          <label for="word" class="gate__label">The word</label>
+          <input
+            id="word"
+            name="word"
+            type="password"
+            class="gate__input"
+            autocomplete="off"
+            autofocus
+            required
+            aria-invalid={wrong ? 'true' : undefined}
+            aria-describedby={wrong ? 'gate-error' : undefined}
+          />
+          {wrong && (
+            <p id="gate-error" class="gate__error" role="alert">
+              That is not it. Check the message the link came in.
+            </p>
+          )}
+          <Button type="submit" variant="primary" size="lg">OPEN</Button>
+        </form>
+      </section>
+    ) : (
+      <>
+        <PageHero eyebrow="Private · Forward-deployed engineering">
+          <Fragment slot="title">
+            We don’t send a deck. <span class="accent">We embed.</span>
+          </Fragment>
+          <Fragment slot="intro">
+            Every business has a process nobody owns — done by hand because it has always been done by
+            hand, too busy to fix because everyone is busy running it. This is how we take one apart
+            from the inside, what happened when we did it for a training company, and what you own
+            when we leave.
+          </Fragment>
+          <Fragment slot="actions">
+            <Button href="/contact" variant="primary" size="lg">BOOK TWENTY MINUTES</Button>
+            {FILM && (
+              <Button href="#film" variant="secondary" size="lg">WATCH THE FILM</Button>
+            )}
+          </Fragment>
+        </PageHero>
+
+        {FILM ? (
+          <section id="film" class="film container">
+            <div class="film__frame">
+              <video controls playsinline preload="metadata" src={FILM} />
+            </div>
+            <p class="film__caption">
+              {FILM_RUNTIME}.{' '}
+              <a href={FILM} download>
+                Download the file
+              </a>{' '}
+              if you would rather send it on.
+            </p>
+          </section>
+        ) : (
+          <section id="film" class="film container">
+            <div class="film__frame film__frame--pending">
+              <p>The film is being finished. This page will carry it here.</p>
+            </div>
+          </section>
+        )}
+
+        <section class="section container">
+          <SectionHeader>
+            <Fragment slot="title">
+              What <span class="accent">forward-deployed</span> actually means.
+            </Fragment>
+            <Fragment slot="lead">
+              It is a way of working, not a service tier. The whole of it is that the engineers are
+              inside your business rather than reporting on it from outside.
+            </Fragment>
+          </SectionHeader>
+          <div class="means">
+            {means.map((m) => (
+              <article class="means__item">
+                <h3>{m.title}</h3>
+                <p>{m.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section class="section section--tint">
+          <div class="container">
+            <SectionHeader>
+              <Fragment slot="title">
+                Two hours, by hand, every intake. Now <span class="accent">two minutes</span>.
+              </Fragment>
+              <Fragment slot="lead">
+                Two of our engineers sat inside a training company and took student registration
+                apart — application, screening, interview prep, enrollment — then rebuilt it as a
+                pipeline that runs itself. Nobody wrote a report about it.
+              </Fragment>
+            </SectionHeader>
+            <div class="proof">
+              {proof.map((p) => (
+                <div class="proof__item">
+                  <span class="proof__value">{p.value}</span>
+                  <span class="proof__label">{p.label}</span>
+                </div>
+              ))}
+            </div>
+            <p class="proof__note">
+              <a href="/case-studies/nooktek-registration">Read the full case study</a>
+            </p>
+          </div>
+        </section>
+
+        <section class="section container">
+          <SectionHeader>
+            <Fragment slot="title">
+              And when what you need is <span class="accent">software</span>, we build that too.
+            </Fragment>
+            <Fragment slot="lead">
+              SeatStep is ours — a production app for finding your seat in a stadium, and getting back
+              to your car afterwards. Same team, same model.
+            </Fragment>
+          </SectionHeader>
+          <ul class="software">
+            {software.map((s) => (
+              <li>{s}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="section section--tint">
+          <div class="container">
+            <SectionHeader>
+              <Fragment slot="title">
+                Yours when we <span class="accent">leave</span>.
+              </Fragment>
+              <Fragment slot="lead">
+                We plan the exit from day one. Dependency is a bug, not a business model — and the
+                statement of work guarantees your data comes with you.
+              </Fragment>
+            </SectionHeader>
+            <ul class="owned">
+              {owned.map((o) => (
+                <li>{o}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <CtaBand />
+      </>
+    )
+  }
+</BaseLayout>
+
+<style>
+  /* ---- the gate ----------------------------------------------------------- */
+  .gate {
+    display: grid;
+    place-items: center;
+    min-height: 70vh;
+    padding-block: var(--space-xl);
+  }
+  .gate__card {
+    width: min(100%, 30rem);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+    box-shadow: var(--shadow-form);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  .gate__card h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 1.9rem);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-display);
+    color: var(--ink);
+    text-wrap: balance;
+    margin: 0;
+  }
+  .gate__lead {
+    color: var(--body);
+    margin: 0;
+  }
+  .gate__lead code {
+    font-size: 0.9em;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.1em 0.4em;
+  }
+  .gate__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: var(--space-xs);
+  }
+  .gate__input {
+    font: inherit;
+    font-size: 1.1rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-input);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .gate__input:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-color: var(--brand);
+  }
+  .gate__input[aria-invalid='true'] {
+    border-color: var(--brand);
+  }
+  .gate__error {
+    color: var(--brand-deep);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  /* ---- the film ----------------------------------------------------------- */
+  .film {
+    padding-block: 0 var(--space-xl);
+  }
+  .film__frame {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--dark);
+    box-shadow: var(--shadow-card);
+    aspect-ratio: 16 / 9;
+  }
+  .film__frame video {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .film__frame--pending {
+    display: grid;
+    place-items: center;
+    padding: var(--space-md);
+  }
+  .film__frame--pending p {
+    color: #8a8b93;
+    margin: 0;
+    text-align: center;
+  }
+  .film__caption {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: var(--space-xs) 0 0;
+  }
+
+  /* ---- what it means ------------------------------------------------------ */
+  .means {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: var(--space-md);
+  }
+  .means__item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+  }
+  .means__item h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tracking-display);
+    color: var(--ink);
+    margin: 0 0 0.6rem;
+    text-wrap: balance;
+  }
+  .means__item p {
+    color: var(--body);
+    margin: 0;
+  }
+
+  /* ---- the proof ---------------------------------------------------------- */
+  .proof {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: var(--space-md);
+    padding-block: var(--space-lg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .proof__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .proof__value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    line-height: 1;
+    letter-spacing: var(--tracking-display);
+    color: var(--brand);
+  }
+  .proof__label {
+    color: var(--body);
+    font-size: 0.95rem;
+  }
+  .proof__note {
+    margin: var(--space-sm) 0 0;
+    font-size: 0.95rem;
+  }
+
+  /* ---- what we build ------------------------------------------------------ */
+  .software,
+  .owned {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-sm);
+  }
+  .software li,
+  .owned li {
+    position: relative;
+    padding-left: 1.6rem;
+    color: var(--body);
+  }
+  .software li::before,
+  .owned li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.55rem;
+    height: 0.55rem;
+    background: var(--brand);
+  }
+  .owned li {
+    font-size: 1.15rem;
+    color: var(--ink);
+  }
+</style>

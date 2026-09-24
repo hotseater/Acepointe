@@ -12,10 +12,14 @@ export default defineConfig({
   adapter: vercel(),
   integrations: [
     sitemap({
-      // /brightcover is a private, password-gated case page for named prospects.
-      // It is noindex on the page itself; keeping it out of the sitemap means a
-      // crawler is never handed the URL in the first place.
-      filter: (page) => !page.includes('/brightcover'),
+      // /brightcover and /forward-deployed are private, password-gated pages for
+      // named prospects. They are noindex on the page itself; keeping them out of
+      // the sitemap means a crawler is never handed the URL in the first place.
+      //
+      // /film holds the sales films themselves. Those are static files with no
+      // page to carry a noindex tag, and Google does index mp4s -- robots.txt is
+      // the only thing standing between an unlisted film and a video result.
+      filter: (page) => !['/brightcover', '/forward-deployed', '/film'].some((p) => page.includes(p)),
     }),
   ],
 
