@@ -38,8 +38,18 @@ export const prerender = false;
 const COOKIE = 'ap_brightcover';
 const PASSWORD = import.meta.env.BRIGHTCOVER_PAGE_PASSWORD;
 
-/** Set when the sales film is rendered AND Franca has agreed to its use. */
-const VIDEO_URL: string | null = null;
+/**
+ * Film A — "The system that runs your marketing".
+ *
+ * CONSENT. The film shows Franca's generated likeness and cloned voice, in six
+ * of her own films, to sell the same build to other businesses. That is a wider
+ * use than the marketing she signed off, and it rests on her agreeing to be a
+ * case study (14 Sep 2026). If that agreement was verbal, it is worth having in
+ * writing before this page is sent to anybody.
+ */
+const VIDEO_URL: string | null = '/film/acepointe-the-system.mp4';
+const CAPTIONS_URL: string | null = '/film/acepointe-the-system.vtt';
+const VIDEO_RUNTIME = 'Under two minutes';
 
 let unlocked = false;
 let wrong = false;
@@ -220,10 +230,16 @@ const timeline = [
         {VIDEO_URL && (
           <section class="film container">
             <div class="film__frame">
-              <video controls playsinline preload="metadata" src={VIDEO_URL} />
+              <video controls playsinline preload="metadata" src={VIDEO_URL}>
+                {CAPTIONS_URL && (
+                  <track kind="captions" src={CAPTIONS_URL} srclang="en" label="English" default />
+                )}
+              </video>
             </div>
             <p class="film__caption">
-              Two and a half minutes. The first eight seconds are the client’s own film.
+              {VIDEO_RUNTIME}.{' '}
+              <a href={VIDEO_URL} download>Download the file</a>{' '}
+              if you would rather send it on.
             </p>
           </section>
         )}

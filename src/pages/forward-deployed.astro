@@ -38,16 +38,11 @@ const PASSWORD = import.meta.env.FORWARD_DEPLOYED_PAGE_PASSWORD;
 /**
  * The film, once it is rendered with narration and placed in public/film/.
  *
- * Set this to '/film/acepointe-forward-deployed.mp4' when the file is there.
- * It stays null until then, because a <video> pointing at a 404 renders as a
- * black rectangle with a dead control bar — worse than no player at all on a
- * page a prospect was sent personally.
- *
  * The filename is what a prospect ends up with in their downloads folder, which
  * is why it says what it is rather than being a hash.
  */
 const FILM: string | null = '/film/acepointe-forward-deployed.mp4';
-const FILM_RUNTIME = '2 minutes 27 seconds';
+const FILM_RUNTIME = 'Under two minutes';
 
 /**
  * The caption track, generated from the narration's own word timings.
